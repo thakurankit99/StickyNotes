@@ -14,7 +14,7 @@ RUN make clean-frontend frontend
 FROM --platform=$BUILDPLATFORM golang:1-bullseye AS plik-builder
 
 # Install needed binaries
-RUN apt-get update && apt-get install -y build-essential crossbuild-essential-armhf crossbuild-essential-armel crossbuild-essential-arm64 crossbuild-essential-i386
+RUN apt-get update && apt-get install -y build-essential crossbuild-essential-armhf crossbuild-essential-armel crossbuild-essential-arm64 crossbuild-essential-i386 git
 
 # Prepare the source location
 RUN mkdir -p /go/src/github.com/root-gg/plik
@@ -32,13 +32,21 @@ ENV TARGETARCH=$TARGETARCH
 ENV TARGETVARIANT=$TARGETVARIANT
 ENV CC=$CC
 
+# Initialize git repository and set a version
+RUN git init && \
+    git config --global user.email "docker@build.local" && \
+    git config --global user.name "Docker Build"
+
 # Add the source code ( see .dockerignore )
 COPY . .
 
-# Make all scripts executable then run the releaser
+# Make all scripts executable, create git tag, and run the releaser
 RUN chmod +x releaser/releaser.sh && \
     chmod +x server/gen_build_info.sh && \
     find . -name "*.sh" -type f -exec chmod +x {} \; && \
+    git add . && \
+    git commit -m "Docker build commit" && \
+    git tag -a "v1.0.0" -m "Docker build tag" && \
     releaser/releaser.sh
 
 ##################################################################################
