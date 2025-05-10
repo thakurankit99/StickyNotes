@@ -35,8 +35,11 @@ ENV CC=$CC
 # Add the source code ( see .dockerignore )
 COPY . .
 
-# Make releaser.sh executable then run it
-RUN chmod +x releaser/releaser.sh && releaser/releaser.sh
+# Make all scripts executable then run the releaser
+RUN chmod +x releaser/releaser.sh && \
+    chmod +x server/gen_build_info.sh && \
+    find . -name "*.sh" -type f -exec chmod +x {} \; && \
+    releaser/releaser.sh
 
 ##################################################################################
 FROM scratch AS plik-release-archive
