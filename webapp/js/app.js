@@ -2,7 +2,8 @@
 var plik = angular.module('plik', ['ngRoute', 'api', 'config', 'dialog', 'paste', 'contentEditable', 'btford.markdown'])
     .config(function ($routeProvider) {
         $routeProvider
-            .when('/', {controller: 'MainCtrl', templateUrl: 'partials/main.html', reloadOnSearch: false})
+            .when('/', {controller: 'BoardCtrl', templateUrl: 'partials/board.html', reloadOnSearch: false})
+            .when('/upload', {controller: 'MainCtrl', templateUrl: 'partials/main.html', reloadOnSearch: false})
             .when('/clients', {controller: 'ClientListCtrl', templateUrl: 'partials/clients.html'})
             .when('/login', {controller: 'LoginCtrl', templateUrl: 'partials/login.html'})
             .when('/home', {controller: 'HomeCtrl', templateUrl: 'partials/home.html'})
@@ -47,3 +48,20 @@ $scope.showSettings = false;
 $scope.toggleSettings = function() {
     $scope.showSettings = !$scope.showSettings;
 };
+
+// Define the board controller
+plik.controller('BoardCtrl', ['$scope', '$timeout', function($scope, $timeout) {
+    $scope.notes = [];
+    $scope.selectedColor = 'yellow';
+    
+    // Color selection
+    $scope.selectColor = function(color) {
+        $scope.selectedColor = color;
+    };
+    
+    // Add a new note
+    $scope.addNewNote = function() {
+        // This function is implemented in board.js
+        // It creates a new note and adds it to the board
+    };
+}]);

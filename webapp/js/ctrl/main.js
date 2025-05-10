@@ -713,7 +713,16 @@ plik.controller('MainCtrl', ['$scope', '$api', '$config', '$route', '$location',
 
         whenReady(function () {
             $scope.registerPasteHandler();
-            if ($scope.isFeatureDefault("text")) {
+            
+            // Check for a note from board view
+            var noteToUpload = localStorage.getItem('noteToUpload');
+            if (noteToUpload) {
+                // Clear it
+                localStorage.removeItem('noteToUpload');
+                
+                // Create a text note
+                $scope.openTextDialog(noteToUpload);
+            } else if ($scope.isFeatureDefault("text")) {
                 $scope.openTextDialog();
             }
         })

@@ -1,0 +1,280 @@
+/* Sticky Board Interface Styling */
+
+.sticky-board {
+    position: relative;
+    min-height: 600px;
+    background-color: #f5f5f5;
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="white"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="rgba(0,0,0,0.05)" stroke-width="1"/></svg>');
+    background-size: 20px 20px;
+    border-radius: 5px;
+    padding: 20px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.sticky-note {
+    position: absolute;
+    min-width: 150px;
+    min-height: 150px;
+    padding: 15px;
+    border-radius: 2px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Indie Flower', cursive;
+    cursor: move;
+    z-index: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.sticky-note:hover {
+    z-index: 100;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sticky-note-yellow {
+    background-color: #fefabc;
+    transform: rotate(1deg);
+}
+
+.sticky-note-pink {
+    background-color: #ffb5e8;
+    transform: rotate(-1deg);
+}
+
+.sticky-note-blue {
+    background-color: #b5deff;
+    transform: rotate(1.5deg);
+}
+
+.sticky-note-green {
+    background-color: #c3ffb5;
+    transform: rotate(-1.5deg);
+}
+
+.sticky-note-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 80px;
+}
+
+.sticky-note-content[contenteditable="true"] {
+    outline: none;
+    border: none;
+}
+
+.sticky-note-content:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sticky-note-header {
+    position: relative;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+.sticky-note-controls {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+}
+
+.sticky-note:hover .sticky-note-controls {
+    display: block;
+}
+
+.sticky-control-btn {
+    background: none;
+    border: none;
+    color: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    margin-left: 5px;
+    padding: 0;
+    font-size: 16px;
+}
+
+.sticky-control-btn:hover {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.resize-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize;
+    background-image: url('data:image/svg+xml;utf8,<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M0,10 L10,0 M7,10 L10,7 M3,10 L10,3" stroke="rgba(0,0,0,0.3)" stroke-width="1"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.sticky-author {
+    position: absolute;
+    bottom: 5px;
+    right: 8px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.board-toolbar {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-note-btn {
+    padding: 8px 15px;
+    background-color: #4ecdc4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Indie Flower', cursive;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.add-note-btn:hover {
+    background-color: #ff6b35;
+    transform: scale(1.05);
+}
+
+.color-picker {
+    display: flex;
+    gap: 5px;
+}
+
+.color-option {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.color-option:hover, .color-option.active {
+    transform: scale(1.2);
+    border-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.color-yellow {
+    background-color: #fefabc;
+}
+
+.color-pink {
+    background-color: #ffb5e8;
+}
+
+.color-blue {
+    background-color: #b5deff;
+}
+
+.color-green {
+    background-color: #c3ffb5;
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.board-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.board-header-right {
+    display: flex;
+    gap: 10px;
+}
+
+.board-title {
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    font-family: 'Indie Flower', cursive;
+    color: #333;
+}
+
+.board-action-btn {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.btn-manage {
+    background-color: #ffd700;
+    color: #333;
+}
+
+.btn-disable {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.btn-help {
+    background-color: #f0f0f0;
+    color: #333;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Context menu styles */
+.note-context-menu {
+    position: absolute;
+    width: 150px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+}
+
+.context-menu-item {
+    padding: 8px 12px;
+    font-family: sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.context-menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+.context-menu-item i {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+.context-menu-separator {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 4px 0;
+} 
