@@ -1,11 +1,117 @@
 /* Additional StickyNotes Styling */
 
+/* Make the entire page a drop zone */
+body {
+    position: relative;
+}
+
+body:before {
+    display: none;
+    content: "Drop files here to create a new note!";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    font-family: 'Indie Flower', cursive !important;
+    font-size: 3em;
+    text-align: center;
+    padding-top: 20%;
+    color: #ff6b35;
+    pointer-events: none;
+}
+
+body.drag-over:before {
+    display: block;
+}
+
+/* Enhance sticky note appearance */
+.tile {
+    background-color: #fefabc !important;
+    border-radius: 2px !important;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2) !important;
+    transform: rotate(0.5deg) !important;
+    transition: transform 0.2s ease !important;
+    font-family: 'Indie Flower', cursive !important;
+    position: relative !important;
+    padding: 15px !important;
+    border: none !important;
+}
+
+/* Add a pushpin effect to notes */
+.tile:before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #ff6b35;
+    border-radius: 50%;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.tile:nth-child(even) {
+    background-color: #fff9b1 !important;
+    transform: rotate(-0.5deg) !important;
+}
+
+.tile:nth-child(even):before {
+    background-color: #4ecdc4;
+}
+
+.tile:nth-child(3n) {
+    background-color: #fffa9c !important;
+    transform: rotate(1deg) !important;
+}
+
+.tile:nth-child(3n):before {
+    background-color: #7bc950;
+}
+
+.tile:hover {
+    transform: scale(1.02) rotate(0deg) !important;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3) !important;
+    z-index: 2 !important;
+}
+
+/* Make the note pad edge appearance */
+.tile:after {
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 5px;
+    bottom: -5px;
+    left: 5%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 5px 5px;
+}
+
+/* Special styling for menu tiles */
+.menu {
+    background-color: #ff9b73 !important;
+}
+
+.menu:before {
+    background-color: #333 !important;
+}
+
+.menu:hover {
+    transform: scale(1.01) rotate(0.5deg) !important;
+}
+
 /* Make the drop zone more attractive */
 #drop-zone {
     border: 3px dashed #4ecdc4 !important;
     border-radius: 5px !important;
     padding: 25px !important;
     transition: all 0.3s ease !important;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%234ecdc4" opacity="0.1" d="M30,1h40l29,29v40l-29,29h-40l-29-29v-40z"/></svg>') !important;
+    background-repeat: repeat !important;
+    background-size: 50px 50px !important;
 }
 
 .upload-drop-zone {
@@ -21,6 +127,7 @@
 #drop-zone.drag-over {
     background-color: rgba(255, 255, 255, 0.7) !important;
     border-color: #7bc950 !important;
+    transform: scale(1.05) !important;
 }
 
 /* Text editor styling */
@@ -32,6 +139,16 @@
 /* Change copy icon */
 .glyphicon-copy {
     color: #4ecdc4 !important;
+}
+
+/* Style the file list to look like lines on a notepad */
+.file {
+    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+    padding: 10px 0 !important;
+}
+
+.file-name {
+    font-family: 'Indie Flower', cursive !important;
 }
 
 /* Enhance mobile experience */
