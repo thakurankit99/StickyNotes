@@ -7,7 +7,7 @@ body {
 
 body:before {
     display: none;
-    content: "Drop files here to create a new note!";
+    content: "Drop here to create a new note!";
     position: fixed;
     top: 0;
     left: 0;
@@ -144,11 +144,42 @@ body.drag-over:before {
 /* Style the file list to look like lines on a notepad */
 .file {
     border-bottom: 1px solid rgba(0,0,0,0.1) !important;
-    padding: 10px 0 !important;
+    padding: 10px 5px !important;
+    position: relative !important;
+    background-color: rgba(255, 255, 255, 0.4) !important;
+    border-radius: 3px !important;
+    margin-bottom: 8px !important;
+}
+
+.file:before {
+    content: "📎";
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
 }
 
 .file-name {
     font-family: 'Indie Flower', cursive !important;
+    font-size: 16px !important;
+    color: #444 !important;
+}
+
+/* Add a paperclip icon for attachments */
+.btn .fa-paperclip {
+    transform: rotate(30deg);
+    font-size: 1.2em;
+}
+
+/* File editing experience */
+.file-flex {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.file-pencil-padding {
+    margin-right: 8px !important;
 }
 
 /* Enhance mobile experience */

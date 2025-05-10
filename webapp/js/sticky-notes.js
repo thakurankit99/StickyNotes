@@ -6,6 +6,7 @@
     // Wait for document to be ready
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();
+        addWelcomeNote(); // Activate the welcome note
     });
 
     // Setup whole-page drag and drop
@@ -27,12 +28,25 @@
         body.addEventListener('dragenter', function(e) {
             dragCounter++;
             body.classList.add('drag-over');
+            
+            // Show a subtle animation to indicate the page is a drop target
+            var header = document.querySelector('header');
+            if (header) {
+                header.style.transform = 'scale(0.98)';
+                header.style.transition = 'transform 0.3s ease';
+            }
         }, false);
 
         body.addEventListener('dragleave', function(e) {
             dragCounter--;
             if (dragCounter === 0) {
                 body.classList.remove('drag-over');
+                
+                // Reset the header animation
+                var header = document.querySelector('header');
+                if (header) {
+                    header.style.transform = '';
+                }
             }
         }, false);
 
@@ -40,6 +54,12 @@
         body.addEventListener('drop', function(e) {
             dragCounter = 0;
             body.classList.remove('drag-over');
+            
+            // Reset the header animation
+            var header = document.querySelector('header');
+            if (header) {
+                header.style.transform = '';
+            }
             
             // Get the drop event data
             var files = e.dataTransfer.files;
@@ -73,12 +93,81 @@
             // Mark as shown
             localStorage.setItem('stickyNotesWelcomeShown', 'true');
             
-            // TODO: Add welcome note using the app's API
-            // This would typically be done through the app's normal note creation flow
-            // For now, we'll just show an alert
+            // Add welcome message
             setTimeout(function() {
-                alert("Welcome to StickyNotes! Drop files anywhere on the page to create a new note.");
+                showWelcomePopup();
             }, 1000);
         }
+    }
+    
+    function showWelcomePopup() {
+        // Create popup elements
+        var overlay = document.createElement('div');
+        var popup = document.createElement('div');
+        var message = document.createElement('div');
+        var closeBtn = document.createElement('button');
+        
+        // Style the overlay
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        overlay.style.zIndex = '10000';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        
+        // Style the popup
+        popup.style.backgroundColor = '#fefabc';
+        popup.style.padding = '20px';
+        popup.style.borderRadius = '5px';
+        popup.style.maxWidth = '400px';
+        popup.style.fontFamily = "'Indie Flower', cursive";
+        popup.style.position = 'relative';
+        popup.style.boxShadow = '3px 3px 10px rgba(0,0,0,0.3)';
+        popup.style.transform = 'rotate(1deg)';
+        
+        // Add message content
+        message.innerHTML = `
+            <h2 style="color:#ff6b35;text-align:center;margin-top:0;">Welcome to StickyNotes!</h2>
+            <p style="font-size:16px;line-height:1.5;">
+                This app helps you create and share notes with anyone. You can:
+            </p>
+            <ul style="font-size:16px;line-height:1.5;">
+                <li>📝 Create text notes</li>
+                <li>📎 Attach images and documents</li>
+                <li>🔗 Share notes with a simple link</li>
+                <li>⏱️ Set notes to expire automatically</li>
+            </ul>
+            <p style="font-size:16px;line-height:1.5;">
+                Just drag and drop content anywhere on this page to get started!
+            </p>
+        `;
+        
+        // Style the close button
+        closeBtn.textContent = 'Got it!';
+        closeBtn.style.display = 'block';
+        closeBtn.style.margin = '20px auto 0';
+        closeBtn.style.padding = '8px 16px';
+        closeBtn.style.backgroundColor = '#4ecdc4';
+        closeBtn.style.border = 'none';
+        closeBtn.style.borderRadius = '4px';
+        closeBtn.style.color = 'white';
+        closeBtn.style.fontFamily = "'Indie Flower', cursive";
+        closeBtn.style.fontSize = '16px';
+        closeBtn.style.cursor = 'pointer';
+        
+        // Add close button functionality
+        closeBtn.addEventListener('click', function() {
+            document.body.removeChild(overlay);
+        });
+        
+        // Assemble and add to DOM
+        popup.appendChild(message);
+        popup.appendChild(closeBtn);
+        overlay.appendChild(popup);
+        document.body.appendChild(overlay);
     }
 })(); 
