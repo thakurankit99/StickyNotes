@@ -35,7 +35,8 @@ ENV CC=$CC
 # Add the source code ( see .dockerignore )
 COPY . .
 
-RUN releaser/releaser.sh
+# Make releaser.sh executable then run it
+RUN chmod +x releaser/releaser.sh && releaser/releaser.sh
 
 ##################################################################################
 FROM scratch AS plik-release-archive
@@ -65,4 +66,4 @@ COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/relea
 EXPOSE 8080
 USER plik
 WORKDIR /home/plik/server
-CMD ./plikd
+CMD ["./plikd"]
