@@ -1,0 +1,24 @@
+*/plik
+plikd
+clients
+*.db
+*.db-wal
+*.db-shm
+server/files
+webapp/dist
+clients
+client/client
+servers
+release
+releases
+debs
+plikd_*.cfg
+*bower_components
+*node_modules
+*.log
+*.key
+*.crt
+# IntelliJ IDEA
+.idea
+plik.iml
+coverage.out

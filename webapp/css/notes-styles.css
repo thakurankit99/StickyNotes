@@ -1,0 +1,50 @@
+/* Additional StickyNotes Styling */
+
+/* Make the drop zone more attractive */
+#drop-zone {
+    border: 3px dashed #4ecdc4 !important;
+    border-radius: 5px !important;
+    padding: 25px !important;
+    transition: all 0.3s ease !important;
+}
+
+.upload-drop-zone {
+    font-family: 'Indie Flower', cursive !important;
+    padding: 20px !important;
+}
+
+#drop-zone-text {
+    font-family: 'Indie Flower', cursive !important;
+    padding: 20px !important;
+}
+
+#drop-zone.drag-over {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    border-color: #7bc950 !important;
+}
+
+/* Text editor styling */
+.comments {
+    font-family: 'Indie Flower', cursive !important;
+    font-size: 16px !important;
+}
+
+/* Change copy icon */
+.glyphicon-copy {
+    color: #4ecdc4 !important;
+}
+
+/* Enhance mobile experience */
+@media (max-width: 768px) {
+    .tile {
+        margin-bottom: 15px !important;
+    }
+    
+    header h1 {
+        font-size: 24px !important;
+    }
+    
+    .tagline {
+        font-size: 14px !important;
+    }
+} 
