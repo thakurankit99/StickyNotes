@@ -7,6 +7,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();
         addWelcomeNote(); // Activate the welcome note
+        initSettingsToggle(); // Initialize settings toggle
     });
 
     // Setup whole-page drag and drop
@@ -84,6 +85,37 @@
                 }
             }
         }, false);
+    }
+
+    // Initialize settings toggle functionality
+    function initSettingsToggle() {
+        // Wait for Angular to be ready
+        var checkInterval = setInterval(function() {
+            if (window.angular) {
+                clearInterval(checkInterval);
+                
+                // Get the Angular scope from the upload menu
+                var uploadMenuElement = document.querySelector('[ng-if="mode == \'upload\'"]');
+                if (uploadMenuElement) {
+                    var scope = angular.element(uploadMenuElement).scope();
+                    
+                    // Add the toggle method to the scope
+                    if (scope) {
+                        // Initialize showSettings
+                        scope.showSettings = false;
+                        
+                        // Add toggle function
+                        scope.toggleSettings = function() {
+                            scope.showSettings = !scope.showSettings;
+                            scope.$apply();
+                        };
+                        
+                        // Apply the changes
+                        scope.$apply();
+                    }
+                }
+            }
+        }, 100);
     }
 
     // Add a welcome message for first-time users

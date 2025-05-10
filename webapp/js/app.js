@@ -39,3 +39,11 @@ var plik = angular.module('plik', ['ngRoute', 'api', 'config', 'dialog', 'paste'
     });
 
 new ClipboardJS('[data-clipboard]')
+
+// Add showSettings to $scope
+$scope.showSettings = false;
+
+// Toggle settings function
+$scope.toggleSettings = function() {
+    $scope.showSettings = !$scope.showSettings;
+};
