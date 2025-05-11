@@ -1,13 +1,60 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Build artifacts
+release/
+bin/
+**/build/
+**/node_modules/
+**/.DS_Store
+
+# Documentation and configs that aren't needed in the image
+*.md
+LICENSE
+CONTRIBUTING
+AUTHORS
+doc/
+
+# Editor configs
+.idea/
+.vscode/
+*.sublime-*
+
+# Test files
+**/*_test.go
+**/tests/
+**/test/
+
+# Debug files
+debug
+*.log
+*.prof
+
+# Temporary files
+tmp/
+**/tmp/
+*~
+**/dist/assets/
+**/.cache/
+
+# Docker files (no need to copy these into the build)
+Dockerfile*
+.dockerignore
+docker-compose*
+
+# Other unnecessary files
+*.tar.gz
+*.zip
+.travis.yml
+
 client/plik
 clients
-release
-releases
 server/plikd
-webapp/node_modules
 webapp/bower_components
 webapp/dist
 **/plik.db*
 **/plik.crt
 **/plik.key
 **/files
-.idea
