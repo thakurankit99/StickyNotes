@@ -21,8 +21,18 @@
             </div>
         </div>
         
-        <!-- UPLOAD MENU -->
-        <div class="tile menu" ng-if="mode == 'upload'">
+        <!-- FLOATING SETTINGS BUTTON -->
+        <div class="floating-settings-btn" ng-click="toggleSettingsPanel()" ng-if="mode == 'upload'">
+            <i class="fa fa-cog"></i>
+        </div>
+        
+        <!-- SETTINGS PANEL (Hidden by default) -->
+        <div class="settings-panel" ng-class="{'settings-panel-visible': showSettingsPanel}" ng-if="mode == 'upload'">
+            <div class="settings-panel-header">
+                <h4>Note Settings</h4>
+                <button class="settings-close-btn" ng-click="toggleSettingsPanel()">×</button>
+            </div>
+            
             <!-- ONE SHOT -->
             <div class="menu-item" ng-show="isFeatureEnabled('one_shot')">
                 <label class="switch-input">
@@ -80,17 +90,11 @@
                 </label>
             </div>
             <div class="menu-item">
-                <p></p>
                 <textarea class="form-control" ng-model="upload.comments" ng-show="enableComments=='1'"
                           style=""></textarea>
             </div>
-            <div class="menu-footer">
-                <p></p>
-            </div>
             <!-- EXPIRATION TIME -->
             <div class="menu-item">
-                <p></p>
-
                 <div class="" style="text-align:center;">
                     <form class="form-inline">
                         <div class="form-group">
@@ -110,8 +114,6 @@
             </div>
             <!-- CREATE EMPTY UPLOAD -->
             <div class="menu-item">
-                <p></p>
-
                 <div class="" style="text-align:center;">
                     <a href="" class="small" ng-click="newUpload(true);"
                        tooltip-placement="bottom" uib-tooltip="Allow adding content to a note after its creation.">
@@ -120,6 +122,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- DOWNLOAD MENU -->
         <div class="tile menu" ng-if="mode == 'download'">
             <!-- QR CODE -->

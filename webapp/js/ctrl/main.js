@@ -8,6 +8,13 @@ plik.controller('MainCtrl', ['$scope', '$api', '$config', '$route', '$location',
         $scope.mode = 'upload';
         $scope.sortField = 'fileName';
         $scope.sortOrder = false;
+        
+        // Settings panel
+        $scope.showSettingsPanel = false;
+        
+        $scope.toggleSettingsPanel = function() {
+            $scope.showSettingsPanel = !$scope.showSettingsPanel;
+        };
 
         $scope.user = null;
         $scope.config = null;

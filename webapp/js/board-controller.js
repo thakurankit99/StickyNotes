@@ -40,6 +40,22 @@
             }
         ];
 
+        // Settings panel visibility
+        $scope.showSettingsPanel = false;
+        
+        // Toggle settings panel visibility
+        $scope.toggleSettingsPanel = function() {
+            $scope.showSettingsPanel = !$scope.showSettingsPanel;
+        };
+        
+        // Make toggleSettingsPanel available in $rootScope for access in other parts of the app
+        $rootScope.toggleSettingsPanel = function() {
+            if ($scope) {
+                $scope.showSettingsPanel = !$scope.showSettingsPanel;
+                $scope.$apply();
+            }
+        };
+
         // Board size settings
         $scope.boardSettings = {
             height: 500, // Default height in pixels
