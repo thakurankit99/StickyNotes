@@ -1,7 +1,17 @@
 services:
   - type: web
     name: stickynotes
-    env: static
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    autoDeploy: false
+    startCommand: ./render-init.sh
+    envVars:
+      - key: NGINX_LOG_PATH
+        value: /tmp/nginx-logs
+      - key: TMPDIR
+        value: /tmp
+    healthCheckPath: /config
     buildCommand: ./build-for-render.sh
     staticPublishPath: ./webapp
     headers:

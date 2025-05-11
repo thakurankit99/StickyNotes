@@ -96,6 +96,11 @@ RUN adduser \
 
 COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/release /home/plik/
 
+# Create required Nginx directories and set proper permissions
+RUN mkdir -p /var/lib/nginx/logs /var/lib/nginx/tmp/client_body /var/lib/nginx/tmp/proxy \
+    && chown -R plik:plik /var/lib/nginx \
+    && chmod -R 755 /var/lib/nginx
+
 # Configure Nginx to serve files with correct MIME types
 RUN mkdir -p /etc/nginx/http.d
 COPY <<EOF /etc/nginx/http.d/default.conf
@@ -104,24 +109,24 @@ server {
     server_name _;
     root /home/plik/webapp;
 
-    # Proper MIME types
+    # Proper MIME types - use the one from mime.types and don't duplicate
     include /etc/nginx/mime.types;
     
-    # Additional MIME type definitions
+    # Only add types not already defined in mime.types
     types {
-        application/javascript js;
-        text/css css;
+        # Any additional MIME types would go here
     }
 
     location / {
         try_files \$uri \$uri/ /index.html;
     }
 
-    location ~ \\.js$ {
+    # Ensure proper content types for JS and CSS without duplicating
+    location ~ \.js$ {
         add_header Content-Type "application/javascript";
     }
 
-    location ~ \\.css$ {
+    location ~ \.css$ {
         add_header Content-Type "text/css";
     }
 }
@@ -134,6 +139,11 @@ RUN echo '#!/bin/sh' > /home/plik/start.sh && \
     echo './plikd "$@"' >> /home/plik/start.sh && \
     chmod +x /home/plik/start.sh && \
     chown ${UID}:${UID} /home/plik/start.sh
+
+# Copy the render init script
+COPY render-init.sh /home/plik/render-init.sh
+RUN chmod +x /home/plik/render-init.sh && \
+    chown ${UID}:${UID} /home/plik/render-init.sh
 
 # Copy the JS/CSS files from builder to final image
 COPY --from=plik-frontend-builder /webapp/dist/js/sticky-notes.js /home/plik/webapp/js/

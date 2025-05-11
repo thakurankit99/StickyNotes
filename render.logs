@@ -1,0 +1,31 @@
+==> Starting service...
+[05/11/2025 08:51:03][INFO    ] Starting plikd server vv1.0.0
+nginx: [alert] could not open error log file: open() "/var/lib/nginx/logs/error.log" failed (13: Permission denied)
+[05/11/2025 08:51:03][WARNING ] Initializing sqlite3 database
+[05/11/2025 08:51:03][INFO    ] Starting server at http://0.0.0.0:8080
+[05/11/2025 08:51:03][INFO    ] Will clean old uploads in 508 seconds.
+2025/05/11 08:51:03 [warn] 7#7: the "user" directive makes sense only if the master process runs with super-user privileges, ignored in /etc/nginx/nginx.conf:3
+2025/05/11 08:51:03 [warn] 7#7: duplicate extension "js", content type: "application/javascript", previous content type: "application/javascript" in /etc/nginx/http.d/default.conf:11
+2025/05/11 08:51:03 [warn] 7#7: duplicate extension "css", content type: "text/css", previous content type: "text/css" in /etc/nginx/http.d/default.conf:12
+2025/05/11 08:51:03 [emerg] 7#7: mkdir() "/var/lib/nginx/tmp/client_body" failed (13: Permission denied)
+==> Your service is live 🎉
+[05/11/2025 08:51:14][INFO    ][[::1]] GET /me [401 Unauthorized] (16.96µs)
+[05/11/2025 08:51:14][INFO    ][[::1]] GET /config [200 OK] (177.894µs)
+[05/11/2025 08:52:07][INFO    ][[::1]] GET /me [401 Unauthorized] (17.27µs)
+[05/11/2025 08:52:07][INFO    ][[::1]] GET /config [200 OK] (27.8µs)
+[05/11/2025 08:53:48][INFO    ][[::1][Lh119luxhJD4BePK]] POST /upload [200 OK] (1.706358ms)
+[05/11/2025 08:53:49][INFO    ][[::1][Lh119luxhJD4BePK][code.png]] POST /file/Lh119luxhJD4BePK/uiDgJ5rTfM1AGMgh/code.png [200 OK] (11.302393ms)
+[05/11/2025 08:53:49][INFO    ][[::1]] GET /qrcode?url=https%3A%2F%2Fstickynotes-imi8.onrender.com%2F%23%2F%3Fid%3DLh119luxhJD4BePK&size=200 [200 OK] (7.6119ms)
+[05/11/2025 08:54:00][INFO    ][[::1][Lh119luxhJD4BePK]] GET /archive/Lh119luxhJD4BePK/archive.zip [200 OK] (2.383864ms)
+[05/11/2025 08:54:43][INFO    ][[::1]] GET /config [200 OK] (27.931µs)
+[05/11/2025 08:54:43][INFO    ][[::1]] GET /me [401 Unauthorized] (8.2µs)
+[05/11/2025 08:54:43][INFO    ][[::1][Lh119luxhJD4BePK]] GET /upload/Lh119luxhJD4BePK [200 OK] (520.462µs)
+[05/11/2025 08:54:43][INFO    ][[::1]] GET /qrcode?url=https%3A%2F%2Fstickynotes-imi8.onrender.com%2F%23%2F%3Fid%3DLh119luxhJD4BePK&size=200 [200 OK] (5.709978ms)
+[05/11/2025 08:55:22][INFO    ][[::1]] GET /me [401 Unauthorized] (12.281µs)
+[05/11/2025 08:55:22][INFO    ][[::1]] GET /config [200 OK] (28.181µs)
+==> Detected service running on port 8080
+==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+[05/11/2025 08:59:31][INFO    ] Cleaning expired uploads...
+[05/11/2025 08:59:31][INFO    ] Purging deleted uploads
+[05/11/2025 08:59:31][INFO    ] Cleaning up SQL database
+[05/11/2025 08:59:31][INFO    ] Will clean old uploads in 487 seconds.
