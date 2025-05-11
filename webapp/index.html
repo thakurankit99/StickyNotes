@@ -33,8 +33,6 @@
                 </div>
                 <!-- TOP MENU -->
                 <div class="col-sm-9 text-right hidden-xs">
-                    <a href="#/board"><i class="fa fa-sticky-note"></i> Sticky Board</a>
-                    &nbsp;
                     <a ng-if="auth_button && isFeatureEnabled('authentication') && !user" href="#/login"><i class="fa fa-lock"></i> Authentication</a>
                     <a ng-if="isFeatureEnabled('authentication') && user" href="#/login">{{user.login}}</a>
                     &nbsp;
@@ -42,7 +40,6 @@
                 </div>
                 <!-- TOP MENU ( mobile ) -->
                 <div class="col-sm-9 text-center hidden-sm hidden-md hidden-lg">
-                    <a href="#/board"><i class="fa fa-sticky-note"></i> Sticky Board</a>
                     <a ng-if="config.authentication && !user" href="#/login"><i class="fa fa-lock"></i> Authentication</a>
                     <a ng-if="config.authentication && user" href="#/login">{{user.login}}</a>
                 </div>
