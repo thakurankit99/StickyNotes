@@ -9,13 +9,17 @@ COPY Makefile .
 COPY webapp /webapp
 
 # Ensure our custom directories exist
-RUN mkdir -p /webapp/js /webapp/css /webapp/dist/js /webapp/dist/css
+RUN mkdir -p /webapp/js /webapp/css /webapp/dist/js /webapp/dist/css /webapp/dist/favicon
 
 # Copy our sticky notes files to webapp directory
 COPY webapp/js/sticky-notes.js /webapp/js/sticky-notes.js
 COPY webapp/js/board-controller.js /webapp/js/board-controller.js
 COPY webapp/css/notes-styles.css /webapp/css/notes-styles.css
 COPY webapp/css/board-view.css /webapp/css/board-view.css
+
+# Copy favicon directory
+COPY webapp/favicon /webapp/favicon
+COPY webapp/favicon /webapp/dist/favicon
 
 # Run the frontend build
 RUN make clean-frontend frontend
@@ -25,6 +29,9 @@ RUN cp -f /webapp/js/sticky-notes.js /webapp/dist/js/ || true
 RUN cp -f /webapp/js/board-controller.js /webapp/dist/js/ || true
 RUN cp -f /webapp/css/notes-styles.css /webapp/dist/css/ || true
 RUN cp -f /webapp/css/board-view.css /webapp/dist/css/ || true
+
+# Ensure favicon files are preserved after build
+RUN cp -rf /webapp/favicon/* /webapp/dist/favicon/ || true
 
 ##################################################################################
 FROM --platform=$BUILDPLATFORM golang:1-bullseye AS plik-builder
