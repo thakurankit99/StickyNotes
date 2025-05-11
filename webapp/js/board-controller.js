@@ -40,6 +40,14 @@
             }
         ];
 
+        // Board size settings
+        $scope.boardSettings = {
+            height: 500, // Default height in pixels
+            minHeight: 300,
+            maxHeight: 2000,
+            stepSize: 100
+        };
+
         // Initialize notes array
         $scope.notes = [];
 
@@ -95,9 +103,67 @@
             }
         };
 
+        // Board size manipulation functions
+        $scope.increaseBoardSize = function() {
+            if ($scope.boardSettings.height < $scope.boardSettings.maxHeight) {
+                $scope.boardSettings.height += $scope.boardSettings.stepSize;
+                updateBoardSize();
+                saveBoardSettings();
+            }
+        };
+
+        $scope.decreaseBoardSize = function() {
+            if ($scope.boardSettings.height > $scope.boardSettings.minHeight) {
+                $scope.boardSettings.height -= $scope.boardSettings.stepSize;
+                updateBoardSize();
+                saveBoardSettings();
+            }
+        };
+
+        $scope.resetBoardSize = function() {
+            $scope.boardSettings.height = 500; // Reset to default
+            updateBoardSize();
+            saveBoardSettings();
+        };
+
+        // Update the board size in the DOM
+        function updateBoardSize() {
+            var board = document.getElementById('notes-board');
+            if (board) {
+                board.style.height = $scope.boardSettings.height + 'px';
+                
+                // Update size indicator
+                var indicator = document.getElementById('board-resize-indicator');
+                if (indicator) {
+                    indicator.textContent = $scope.boardSettings.height + 'px';
+                }
+            }
+        }
+
+        // Save board settings to localStorage
+        function saveBoardSettings() {
+            localStorage.setItem('stickyNotesBoardSettings', JSON.stringify($scope.boardSettings));
+        }
+
+        // Load board settings from localStorage
+        function loadBoardSettings() {
+            var savedSettings = localStorage.getItem('stickyNotesBoardSettings');
+            if (savedSettings) {
+                try {
+                    var settings = JSON.parse(savedSettings);
+                    if (settings && settings.height) {
+                        $scope.boardSettings.height = settings.height;
+                        updateBoardSize();
+                    }
+                } catch (e) {
+                    console.error('Error loading saved board settings', e);
+                }
+            }
+        }
+
         // Get a random note color
         function getRandomNoteColor() {
-            var colors = ['note-yellow', 'note-pink', 'note-blue', 'note-green', 'note-purple'];
+            var colors = ['yellow', 'pink', 'blue', 'green', 'purple'];
             return colors[Math.floor(Math.random() * colors.length)];
         }
 
@@ -117,15 +183,52 @@
             $scope.currentNote = note;
             var colorPicker = document.getElementById('color-picker');
             if (colorPicker) {
-                colorPicker.classList.add('visible');
-                
                 // Position the color picker near the note
                 var noteEl = document.querySelector('[data-id="' + note.id + '"]');
                 if (noteEl) {
-                    var rect = noteEl.getBoundingClientRect();
-                    colorPicker.style.top = (rect.top + window.scrollY - 50) + 'px';
-                    colorPicker.style.left = (rect.left + window.scrollX + 50) + 'px';
+                    var noteRect = noteEl.getBoundingClientRect();
+                    var boardEl = document.getElementById('notes-board');
+                    var boardRect = boardEl.getBoundingClientRect();
+                    
+                    // Calculate positioning
+                    // Try to position to the right of the note first
+                    var leftPos = noteRect.right + 10; // 10px gap
+                    var topPos = noteRect.top + 30; // Align with paint button
+                    var pointRight = false;
+                    
+                    // Check if there's room to the right
+                    if (leftPos + 200 > boardRect.right) {
+                        // Not enough room to the right, place to the left
+                        leftPos = noteRect.left - 170; // Color picker width + gap
+                        pointRight = true;
+                    }
+                    
+                    // Check if there's room at the bottom
+                    if (topPos + 60 > boardRect.bottom) {
+                        // Not enough room at the bottom, adjust upward
+                        topPos = noteRect.bottom - 60;
+                    }
+                    
+                    // Ensure it's not positioned off the top
+                    topPos = Math.max(topPos, boardRect.top + 10);
+                    
+                    // Ensure it's not positioned off the left
+                    leftPos = Math.max(leftPos, boardRect.left + 10);
+                    
+                    // Apply position
+                    colorPicker.style.top = (topPos - boardRect.top + boardEl.scrollTop) + 'px';
+                    colorPicker.style.left = (leftPos - boardRect.left + boardEl.scrollLeft) + 'px';
                     colorPicker.style.right = 'auto';
+                    
+                    // Set pointer direction
+                    if (pointRight) {
+                        colorPicker.classList.add('point-right');
+                    } else {
+                        colorPicker.classList.remove('point-right');
+                    }
+                    
+                    // Show the color picker
+                    colorPicker.classList.add('visible');
                 }
                 
                 // Close picker when clicking outside
@@ -151,6 +254,7 @@
             var colorPicker = document.getElementById('color-picker');
             if (colorPicker) {
                 colorPicker.classList.remove('visible');
+                colorPicker.classList.remove('point-right');
                 document.removeEventListener('click', closeColorPicker);
             }
         }
@@ -186,6 +290,9 @@
         function initBoard() {
             // Load saved state if available
             loadBoardState();
+            
+            // Load board settings
+            loadBoardSettings();
 
             // Initialize drag and drop functionality
             setTimeout(setupDragAndResize, 100);
@@ -197,6 +304,68 @@
                 emptyMessage.className = 'board-empty-message';
                 emptyMessage.innerHTML = 'Your board is empty. Click <strong>Add Note</strong> to get started!';
                 boardContainer.appendChild(emptyMessage);
+                
+                // Setup board resize handle
+                setupBoardResize();
+            }
+        }
+
+        // Setup board resize functionality
+        function setupBoardResize() {
+            var board = document.getElementById('notes-board');
+            var resizeHandle = document.getElementById('board-resize-handle');
+            var resizeIndicator = document.getElementById('board-resize-indicator');
+            
+            if (!board || !resizeHandle || !resizeIndicator) return;
+            
+            var startY, startHeight;
+            
+            resizeHandle.addEventListener('mousedown', initBoardResize);
+            
+            function initBoardResize(e) {
+                e.preventDefault();
+                
+                startY = e.clientY;
+                startHeight = parseInt(document.defaultView.getComputedStyle(board).height, 10);
+                
+                document.addEventListener('mousemove', resizeBoard);
+                document.addEventListener('mouseup', stopBoardResize);
+                
+                // Show resize indicator
+                resizeIndicator.classList.add('visible');
+            }
+            
+            function resizeBoard(e) {
+                e.preventDefault();
+                
+                // Calculate new height
+                var newHeight = startHeight + e.clientY - startY;
+                
+                // Apply constraints
+                newHeight = Math.max($scope.boardSettings.minHeight, Math.min(newHeight, $scope.boardSettings.maxHeight));
+                
+                // Update board height
+                board.style.height = newHeight + 'px';
+                
+                // Update indicator
+                resizeIndicator.textContent = newHeight + 'px';
+                
+                // Update scope variable
+                $scope.boardSettings.height = newHeight;
+                $scope.$apply();
+            }
+            
+            function stopBoardResize() {
+                document.removeEventListener('mousemove', resizeBoard);
+                document.removeEventListener('mouseup', stopBoardResize);
+                
+                // Hide resize indicator after a short delay
+                setTimeout(function() {
+                    resizeIndicator.classList.remove('visible');
+                }, 1000);
+                
+                // Save board settings
+                saveBoardSettings();
             }
         }
 
@@ -255,8 +424,8 @@
                     var boardRect = board.getBoundingClientRect();
                     
                     // Make sure note stays within the board boundaries
-                    newTop = Math.max(0, Math.min(newTop, boardRect.height - 50));
-                    newLeft = Math.max(0, Math.min(newLeft, boardRect.width - 50));
+                    newTop = Math.max(0, Math.min(newTop, board.clientHeight - 50));
+                    newLeft = Math.max(0, Math.min(newLeft, board.clientWidth - 50));
                 }
                 
                 // Set the element's new position
@@ -302,9 +471,25 @@
             function resizeElement(e) {
                 e.preventDefault();
                 
+                // Calculate new dimensions
+                var newWidth = (startWidth + e.clientX - startX);
+                var newHeight = (startHeight + e.clientY - startY);
+                
+                // Apply constraints
+                var board = document.getElementById('notes-board');
+                if (board) {
+                    var boardRect = board.getBoundingClientRect();
+                    var elementRect = element.getBoundingClientRect();
+                    var maxWidth = board.clientWidth - element.offsetLeft;
+                    var maxHeight = board.clientHeight - element.offsetTop;
+                    
+                    newWidth = Math.max(100, Math.min(newWidth, maxWidth));
+                    newHeight = Math.max(100, Math.min(newHeight, maxHeight));
+                }
+                
                 // Set the new size
-                element.style.width = (startWidth + e.clientX - startX) + 'px';
-                element.style.height = (startHeight + e.clientY - startY) + 'px';
+                element.style.width = newWidth + 'px';
+                element.style.height = newHeight + 'px';
                 
                 // Update the note model
                 updateNoteSize(element);

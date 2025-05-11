@@ -3,6 +3,7 @@
     position: relative;
     width: 100%;
     min-height: 500px;
+    max-height: 800px; /* Default max height that can be adjusted */
     background-color: #f5f5f5;
     background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" fill="%23f0f0f0"/><rect x="10" y="10" width="10" height="10" fill="%23f0f0f0"/></svg>');
     padding: 20px;
@@ -11,6 +12,80 @@
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     border: 2px dashed #ddd;
+    /* Add transition for smooth resizing */
+    transition: height 0.2s ease;
+    /* Set initial height */
+    height: 500px;
+}
+
+/* Board resize handle */
+.board-resize-handle {
+    position: absolute;
+    width: 100%;
+    height: 15px;
+    bottom: 0;
+    left: 0;
+    cursor: ns-resize;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.board-resize-handle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.board-resize-handle:after {
+    content: "═══";
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.board-resize-indicator {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 11;
+}
+
+.board-resize-indicator.visible {
+    opacity: 1;
+}
+
+.board-size-controls {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+
+.board-size-button {
+    width: 28px;
+    height: 28px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.board-size-button:hover {
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .board-title {
@@ -208,34 +283,78 @@
 
 .color-picker {
     position: absolute;
-    top: 45px;
-    right: 10px;
     background-color: white;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: none;
-    flex-direction: column;
-    gap: 5px;
+    flex-direction: row;
+    gap: 8px;
     z-index: 999;
+    transform: scale(0.95);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    opacity: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Pointer triangle for the color picker */
+.color-picker:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    /* Default position (right side) */
+    left: -10px;
+    top: 12px;
+    border-width: 8px 10px 8px 0;
+    border-color: transparent white transparent transparent;
+}
+
+/* Class for when the picker appears on the left side of a note */
+.color-picker.point-right:before {
+    left: auto;
+    right: -10px;
+    border-width: 8px 0 8px 10px;
+    border-color: transparent transparent transparent white;
 }
 
 .color-picker.visible {
     display: flex;
+    transform: scale(1);
+    opacity: 1;
 }
 
 .color-option {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid transparent;
-    transition: transform 0.2s;
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
 }
 
 .color-option:hover {
-    transform: scale(1.2);
-    border-color: white;
+    transform: scale(1.15);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.color-option.selected {
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.color-option.selected:after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    font-weight: bold;
 }
 
 /* Empty board message */
@@ -259,10 +378,16 @@
 @media (max-width: 768px) {
     .board-container {
         min-height: 400px;
+        height: 400px;
     }
     
     .board-sticky-note {
         min-width: 120px;
         min-height: 120px;
+    }
+    
+    .board-size-controls {
+        top: 10px;
+        right: 10px;
     }
 } 

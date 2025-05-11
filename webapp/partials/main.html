@@ -206,6 +206,20 @@
             <div class="col-sm-12">
                 <div class="board-container" id="notes-board" ng-controller="BoardCtrl">
                     <h3 class="board-title">My Sticky Notes</h3>
+                    
+                    <!-- Board size controls -->
+                    <div class="board-size-controls">
+                        <div class="board-size-button" ng-click="increaseBoardSize()" title="Increase board size">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                        <div class="board-size-button" ng-click="decreaseBoardSize()" title="Decrease board size">
+                            <i class="fa fa-minus"></i>
+                        </div>
+                        <div class="board-size-button" ng-click="resetBoardSize()" title="Reset board size">
+                            <i class="fa fa-refresh"></i>
+                        </div>
+                    </div>
+                    
                     <!-- Notes will be dynamically added here -->
                     <div class="board-sticky-note note-{{note.color}}" 
                          ng-repeat="note in notes" 
@@ -225,12 +239,18 @@
                     </div>
                     
                     <div class="color-picker" id="color-picker">
-                        <div class="color-option" style="background-color: #fefabc;" ng-click="changeNoteColor('yellow')"></div>
-                        <div class="color-option" style="background-color: #ff9b9b;" ng-click="changeNoteColor('pink')"></div>
-                        <div class="color-option" style="background-color: #a2d8ff;" ng-click="changeNoteColor('blue')"></div>
-                        <div class="color-option" style="background-color: #b5f587;" ng-click="changeNoteColor('green')"></div>
-                        <div class="color-option" style="background-color: #d8b5ff;" ng-click="changeNoteColor('purple')"></div>
+                        <div class="color-option" style="background-color: #fefabc;" ng-click="changeNoteColor('yellow')" ng-class="{'selected': currentNote.color === 'yellow'}"></div>
+                        <div class="color-option" style="background-color: #ff9b9b;" ng-click="changeNoteColor('pink')" ng-class="{'selected': currentNote.color === 'pink'}"></div>
+                        <div class="color-option" style="background-color: #a2d8ff;" ng-click="changeNoteColor('blue')" ng-class="{'selected': currentNote.color === 'blue'}"></div>
+                        <div class="color-option" style="background-color: #b5f587;" ng-click="changeNoteColor('green')" ng-class="{'selected': currentNote.color === 'green'}"></div>
+                        <div class="color-option" style="background-color: #d8b5ff;" ng-click="changeNoteColor('purple')" ng-class="{'selected': currentNote.color === 'purple'}"></div>
                     </div>
+                    
+                    <!-- Board resize indicator -->
+                    <div class="board-resize-indicator" id="board-resize-indicator">500px</div>
+                    
+                    <!-- Board resize handle -->
+                    <div class="board-resize-handle" id="board-resize-handle"></div>
                 </div>
             </div>
         </div>
@@ -313,8 +333,8 @@
                         <div ng-show="file.status == 'uploading'" class="progress">
                             <div class="progress-bar progress-bar-striped active" role="progressbar"
                                  aria-valuenow="{{file.progress}}" aria-valuemin="0" aria-valuemax="100"
-                                 style="width: {{file.progress}}%; min-width:25px;">
-                                <span style="min-width:25px;">{{file.progress}}%</span>
+                                 ng-style="{'width': file.progress + '%', 'min-width': '25px'}">
+                                <span ng-style="{'min-width': '25px'}">{{file.progress}}%</span>
                             </div>
                         </div>
                         <!-- DOWNLOAD BUTTONS -->
