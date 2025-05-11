@@ -1,31 +1,31 @@
 Navigated to https://stickynotes-imi8.onrender.com/
-stickynotes-imi8.onrender.com/:75 
+stickynotes-imi8.onrender.com/:74 
             
             
-            GET https://stickynotes-imi8.onrender.com/js/board-controller.js net::ERR_ABORTED 404 (Not Found)
+            GET https://stickynotes-imi8.onrender.com/js/sticky-notes.js net::ERR_ABORTED 404 (Not Found)
 [NEW] Explain Console errors by using Copilot in Edge: click
          
          to explain an error. 
         Learn more
         Don't show again
 stickynotes-imi8.onrender.com/:1  Refused to apply style from 'https://stickynotes-imi8.onrender.com/css/board-view.css' because its MIME type ('text/plain') is not a supported stylesheet MIME type, and strict MIME checking is enabled.
-stickynotes-imi8.onrender.com/:74 
+stickynotes-imi8.onrender.com/:75 
             
             
-            GET https://stickynotes-imi8.onrender.com/js/sticky-notes.js net::ERR_ABORTED 404 (Not Found)
+            GET https://stickynotes-imi8.onrender.com/js/board-controller.js net::ERR_ABORTED 404 (Not Found)
 stickynotes-imi8.onrender.com/:1  Refused to apply style from 'https://stickynotes-imi8.onrender.com/css/notes-styles.css' because its MIME type ('text/plain') is not a supported stylesheet MIME type, and strict MIME checking is enabled.
 stickynotes-imi8.onrender.com/:1  Refused to execute script from 'https://stickynotes-imi8.onrender.com/js/sticky-notes.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled.
 stickynotes-imi8.onrender.com/:1  Refused to execute script from 'https://stickynotes-imi8.onrender.com/js/board-controller.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled.
-VM888:2 Scraping links on current page
-VM888:26 Found 0 feeds on page...
+VM1407:2 Scraping links on current page
+VM1407:26 Found 0 feeds on page...
 content.06af5f40.js:1 content.ts run!
 content.06af5f40.js:1 initPage()
-VM956:2 Scraping links on current page
-VM956:26 Found 0 feeds on page...
-VM957:2 Scraping links on current page
-VM957:26 Found 0 feeds on page...
-VM958:2 Scraping links on current page
-VM958:26 Found 0 feeds on page...
+VM1428:2 Scraping links on current page
+VM1428:26 Found 0 feeds on page...
+VM1477:2 Scraping links on current page
+VM1477:26 Found 0 feeds on page...
+VM1478:2 Scraping links on current page
+VM1478:26 Found 0 feeds on page...
 injectScriptAdjust.js:1 
             
             
@@ -45,7 +45,7 @@ ne @ vendor.js:15079
 te @ vendor.js:14964
 (anonymous) @ vendor.js:49690
 e @ vendor.js:3489
-t @ vendor.js:3557
+(anonymous) @ vendor.js:3557
 setTimeout
 (anonymous) @ vendor.js:3602
 c @ vendor.js:3223
@@ -55,11 +55,11 @@ c @ vendor.js:3223
 fireWith @ vendor.js:3353
 ready @ vendor.js:3844
 j @ vendor.js:3854
-VM980:2 Scraping links on current page
-VM980:26 Found 0 feeds on page...
-VM981:2 Scraping links on current page
-VM981:26 Found 0 feeds on page...
-VM982:2 Scraping links on current page
-VM982:26 Found 0 feeds on page...
-VM983:2 Scraping links on current page
-VM983:26 Found 0 feeds on page...
+VM1500:2 Scraping links on current page
+VM1500:26 Found 0 feeds on page...
+VM1501:2 Scraping links on current page
+VM1501:26 Found 0 feeds on page...
+VM1502:2 Scraping links on current page
+VM1502:26 Found 0 feeds on page...
+VM1503:2 Scraping links on current page
+VM1503:26 Found 0 feeds on page...

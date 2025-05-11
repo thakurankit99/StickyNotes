@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: stickynotes
+    env: static
+    buildCommand: ./build-for-render.sh
+    staticPublishPath: ./webapp
+    headers:
+      - path: "/*.js"
+        name: "Content-Type"
+        value: "application/javascript"
+      - path: "/*.css"
+        name: "Content-Type"
+        value: "text/css" 
