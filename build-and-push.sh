@@ -52,20 +52,6 @@ for file in "webapp/js/sticky-notes.js" "webapp/js/board-controller.js" "webapp/
     fi
 done
 
-# Check if required configuration files have been updated
-echo "Checking Nginx configuration in Dockerfile..."
-if grep -q "chown -R plik:plik /var/lib/nginx" Dockerfile; then
-    echo "✓ Nginx permissions have been properly configured in Dockerfile."
-else
-    echo "Warning: Nginx permissions might not be properly configured. This could cause issues with logs and temporary directories."
-fi
-
-if grep -q "duplicate extension" Dockerfile; then
-    echo "Warning: Dockerfile may contain duplicate MIME type definitions."
-else
-    echo "✓ MIME type definitions appear to be correctly configured."
-fi
-
 # Build the Docker image
 echo "Building Docker image..."
 docker build -t "$DOCKER_HUB_USERNAME/$IMAGE_NAME:$VERSION" .

@@ -79,13 +79,13 @@ COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/plik-
 ##################################################################################
 FROM alpine:3.18 AS plik-image
 
-RUN apk add --no-cache ca-certificates nginx
+# We're removing Nginx and just using plikd with its built-in server
+RUN apk add --no-cache ca-certificates
 
 # Create plik user
 ENV USER=plik
 ENV UID=1000
 
-# See https://stackoverflow.com/a/55757473/12429735
 RUN adduser \
     --disabled-password \
     --gecos "" \
@@ -96,54 +96,22 @@ RUN adduser \
 
 COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/release /home/plik/
 
-# Create required Nginx directories and set proper permissions
-RUN mkdir -p /var/lib/nginx/logs /var/lib/nginx/tmp/client_body /var/lib/nginx/tmp/proxy \
-    && chown -R plik:plik /var/lib/nginx \
-    && chmod -R 755 /var/lib/nginx
-
-# Configure Nginx to serve files with correct MIME types
-RUN mkdir -p /etc/nginx/http.d
-COPY <<EOF /etc/nginx/http.d/default.conf
-server {
-    listen 8081;
-    server_name _;
-    root /home/plik/webapp;
-
-    # Proper MIME types - use the one from mime.types and don't duplicate
-    include /etc/nginx/mime.types;
-    
-    # Only add types not already defined in mime.types
-    types {
-        # Any additional MIME types would go here
-    }
-
-    location / {
-        try_files \$uri \$uri/ /index.html;
-    }
-
-    # Ensure proper content types for JS and CSS without duplicating
-    location ~ \.js$ {
-        add_header Content-Type "application/javascript";
-    }
-
-    location ~ \.css$ {
-        add_header Content-Type "text/css";
-    }
-}
-EOF
-
-# Create a startup script
+# Create a startup script - without Nginx
 RUN echo '#!/bin/sh' > /home/plik/start.sh && \
     echo 'cd /home/plik/server' >> /home/plik/start.sh && \
-    echo 'nginx -g "daemon off;" &' >> /home/plik/start.sh && \
     echo './plikd "$@"' >> /home/plik/start.sh && \
     chmod +x /home/plik/start.sh && \
     chown ${UID}:${UID} /home/plik/start.sh
 
-# Copy the render init script
+# Copy the render init script - simplified without Nginx references
 COPY render-init.sh /home/plik/render-init.sh
 RUN chmod +x /home/plik/render-init.sh && \
     chown ${UID}:${UID} /home/plik/render-init.sh
+
+# Make sure build-for-render.sh is executable if it exists
+COPY build-for-render.sh /home/plik/build-for-render.sh
+RUN chmod +x /home/plik/build-for-render.sh && \
+    chown ${UID}:${UID} /home/plik/build-for-render.sh
 
 # Copy the JS/CSS files from builder to final image
 COPY --from=plik-frontend-builder /webapp/dist/js/sticky-notes.js /home/plik/webapp/js/
@@ -151,7 +119,7 @@ COPY --from=plik-frontend-builder /webapp/dist/js/board-controller.js /home/plik
 COPY --from=plik-frontend-builder /webapp/dist/css/notes-styles.css /home/plik/webapp/css/
 COPY --from=plik-frontend-builder /webapp/dist/css/board-view.css /home/plik/webapp/css/
 
-EXPOSE 8080 8081
+EXPOSE 8080
 USER plik
 WORKDIR /home/plik
 CMD ["./start.sh"]

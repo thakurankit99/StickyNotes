@@ -7,10 +7,8 @@ services:
     autoDeploy: false
     startCommand: ./render-init.sh
     envVars:
-      - key: NGINX_LOG_PATH
-        value: /tmp/nginx-logs
       - key: TMPDIR
-        value: /tmp
+        value: /tmp/plik
     healthCheckPath: /config
     buildCommand: ./build-for-render.sh
     staticPublishPath: ./webapp
