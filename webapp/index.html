@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="StickyNotes - save and share your notes easily">
     <meta name="author" content="Mathieu Bodjikian, Charles-Antoine Mathieu">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-config" content="favicon/browserconfig.xml">
 
     <title ng-bind="title"></title>
 
@@ -20,19 +17,7 @@
     <link href="css/board-view.css" rel="stylesheet" type="text/css">
 
     <!-- FAVICON -->
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-    <link rel="manifest" href="favicon/site.webmanifest">
-    <link rel="shortcut icon" href="favicon/favicon.ico">
-    
-    <style>
-        .logo-image {
-            max-height: 50px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-    </style>
+    <link rel="shortcut icon" href="favicon.ico">
 </head>
 
 <body>
@@ -43,12 +28,7 @@
             <div class="row">
                 <!-- LOGO -->
                 <div class="col-sm-3 text-center">
-                    <h1>
-                        <a href="#/_">
-                            <img src="favicon/android-chrome-192x192.png" alt="StickyNotes Logo" class="logo-image">
-                            {{title}}
-                        </a>
-                    </h1>
+                    <h1><a href="#/_">{{title}}</a></h1>
                     <p class="tagline">Save & share your notes securely</p>
                 </div>
                 <!-- TOP MENU -->

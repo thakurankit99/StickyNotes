@@ -23,20 +23,4 @@ done
 chmod +x render-init.sh
 find . -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null || true
 
-# Set up PostgreSQL connection
-echo "Setting up PostgreSQL support..."
-
-# Add a note about PostgreSQL configuration
-cat > POSTGRES.md << EOL
-# PostgreSQL Configuration for StickyNotes
-
-This application is configured to use PostgreSQL for data persistence.
-The connection is managed through environment variables:
-
-- PLIKD_METADATA_BACKEND_CONFIG_DRIVER=postgres
-- PLIKD_METADATA_BACKEND_CONFIG_CONNECTION_STRING=your_connection_string
-
-These are set in your Render.com dashboard.
-EOL
-
 echo "Setup completed successfully" 
