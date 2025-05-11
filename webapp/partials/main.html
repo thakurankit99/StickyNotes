@@ -201,56 +201,156 @@
 
     <!-- MAIN -->
     <div class="col-sm-9">
-        <!-- STICKY BOARD -->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="board-container" id="notes-board" ng-controller="BoardCtrl">
-                    <h3 class="board-title">My Sticky Notes</h3>
-                    
-                    <!-- Board size controls -->
-                    <div class="board-size-controls">
-                        <div class="board-size-button" ng-click="increaseBoardSize()" title="Increase board size">
-                            <i class="fa fa-plus"></i>
-                        </div>
-                        <div class="board-size-button" ng-click="decreaseBoardSize()" title="Decrease board size">
-                            <i class="fa fa-minus"></i>
-                        </div>
-                        <div class="board-size-button" ng-click="resetBoardSize()" title="Reset board size">
-                            <i class="fa fa-refresh"></i>
-                        </div>
+        <!-- Sticky Notes Board -->
+        <div ng-controller="BoardCtrl">
+            <div class="board-container">
+                <h2 class="board-title">My Sticky Board</h2>
+                
+                <!-- Board Tools -->
+                <div class="board-tools">
+                    <div class="board-search">
+                        <input type="text" ng-model="searchText" ng-change="filterNotes()" placeholder="Search notes...">
                     </div>
                     
-                    <!-- Notes will be dynamically added here -->
-                    <div class="board-sticky-note note-{{note.color}}" 
-                         ng-repeat="note in notes" 
-                         ng-style="{'left': note.x + 'px', 'top': note.y + 'px', 'width': note.width + 'px', 'height': note.height + 'px', 'z-index': note.zIndex}"
-                         data-id="{{note.id}}"
-                         draggable="true">
-                        <div class="note-content" contenteditable="true" ng-model="note.content">{{note.content}}</div>
-                        <div class="note-actions">
-                            <button title="Change Color" ng-click="openColorPicker(note)">
-                                <i class="fa fa-paint-brush"></i>
+                    <div class="board-tools-right">
+                        <!-- Sort Dropdown -->
+                        <div class="sort-dropdown" id="sort-dropdown">
+                            <button class="board-tool-button" ng-click="toggleSortDropdown($event)">
+                                <i class="fa fa-sort"></i> Sort
                             </button>
-                            <button title="Delete Note" ng-click="deleteNote(note)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <div class="sort-dropdown-content">
+                                <a href="#" ng-click="sortNotes('date')">By Date</a>
+                                <a href="#" ng-click="sortNotes('color')">By Color</a>
+                                <a href="#" ng-click="sortNotes('position')">By Position</a>
+                            </div>
                         </div>
-                        <div class="resize-handle"></div>
+                        
+                        <!-- Export Button -->
+                        <button class="board-tool-button" ng-click="exportBoard()">
+                            <i class="fa fa-download"></i> Export
+                        </button>
+                        
+                        <!-- Settings Button -->
+                        <button class="board-tool-button" ng-click="toggleBoardSettings($event)">
+                            <i class="fa fa-cog"></i> Settings
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Board Settings Panel -->
+                <div id="board-settings-panel" class="board-settings-panel">
+                    <h3>Board Settings</h3>
+                    
+                    <div class="settings-section">
+                        <h4>Display Options</h4>
+                        <div class="settings-option">
+                            <label>
+                                <input type="checkbox" ng-model="boardSettings.showTags" ng-change="updateBoardSettings()"> 
+                                Show Tags
+                            </label>
+                        </div>
+                        <div class="settings-option">
+                            <label>
+                                <input type="checkbox" ng-model="boardSettings.gridSnap" ng-change="updateBoardSettings()"> 
+                                Snap to Grid
+                            </label>
+                        </div>
                     </div>
                     
-                    <div class="color-picker" id="color-picker">
-                        <div class="color-option" style="background-color: #fefabc;" ng-click="changeNoteColor('yellow')" ng-class="{'selected': currentNote.color === 'yellow'}"></div>
-                        <div class="color-option" style="background-color: #ff9b9b;" ng-click="changeNoteColor('pink')" ng-class="{'selected': currentNote.color === 'pink'}"></div>
-                        <div class="color-option" style="background-color: #a2d8ff;" ng-click="changeNoteColor('blue')" ng-class="{'selected': currentNote.color === 'blue'}"></div>
-                        <div class="color-option" style="background-color: #b5f587;" ng-click="changeNoteColor('green')" ng-class="{'selected': currentNote.color === 'green'}"></div>
-                        <div class="color-option" style="background-color: #d8b5ff;" ng-click="changeNoteColor('purple')" ng-class="{'selected': currentNote.color === 'purple'}"></div>
+                    <div class="settings-section">
+                        <h4>Background</h4>
+                        <div class="settings-option">
+                            <select ng-model="boardSettings.background" ng-change="updateBoardSettings()">
+                                <option value="default">Default</option>
+                                <option value="lines">Lines</option>
+                                <option value="dots">Dots</option>
+                                <option value="solid">Solid</option>
+                            </select>
+                        </div>
                     </div>
                     
-                    <!-- Board resize indicator -->
-                    <div class="board-resize-indicator" id="board-resize-indicator">500px</div>
+                    <div class="settings-section">
+                        <h4>Board Size</h4>
+                        <div class="settings-option board-size-control">
+                            <input type="range" 
+                                min="{{boardSettings.minHeight}}" 
+                                max="{{boardSettings.maxHeight}}" 
+                                step="{{boardSettings.stepSize}}" 
+                                ng-model="boardSettings.height" 
+                                ng-change="updateBoardSize()">
+                            <span>{{boardSettings.height}}px</span>
+                        </div>
+                    </div>
                     
-                    <!-- Board resize handle -->
-                    <div class="board-resize-handle" id="board-resize-handle"></div>
+                    <div class="settings-section export-import-section">
+                        <h4>Import Board</h4>
+                        <div class="settings-option">
+                            <label class="export-import-button">
+                                <input type="file" accept=".json" 
+                                    onchange="angular.element(this).scope().importBoard(this.files); this.value = null;">
+                                <i class="fa fa-upload"></i> Import from File
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sticky Notes Board -->
+                <div id="notes-board" class="notes-board">
+                    <!-- Empty Message -->
+                    <div class="board-empty-message" ng-if="filteredNotes.length === 0">
+                        <div ng-if="notes.length === 0">
+                            Your board is empty. Click <strong>Add Note</strong> in the menu to get started!
+                        </div>
+                        <div ng-if="notes.length !== 0">
+                            No notes match your search criteria.
+                        </div>
+                    </div>
+                    
+                    <!-- Sticky Notes -->
+                    <div class="sticky-note" 
+                        ng-repeat="note in filteredNotes" 
+                        ng-style="{ 
+                            'left': note.x + 'px', 
+                            'top': note.y + 'px', 
+                            'width': note.width + 'px', 
+                            'height': note.height + 'px', 
+                            'background-color': note.color, 
+                            'z-index': note.zIndex 
+                        }" 
+                        data-id="{{note.id}}">
+                        
+                        <div class="note-header">
+                            <!-- Tags -->
+                            <div class="note-tags" ng-if="boardSettings.showTags && note.tags.length > 0">
+                                <span class="note-tag" ng-repeat="tag in note.tags">{{tag}}</span>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="note-actions">
+                                <button class="add-tag-button" ng-click="addTagToNote(note, $event)" title="Add Tag">
+                                    <i class="fa fa-tag"></i>
+                                </button>
+                                <button class="change-color-button" ng-click="openColorPicker(note, $event)" title="Change Color">
+                                    <i class="fa fa-paint-brush"></i>
+                                </button>
+                                <button class="delete-note-button" ng-click="deleteNote(note, $event)" title="Delete Note">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="note-content">{{note.content}}</div>
+                    </div>
+                    
+                    <!-- Color Picker -->
+                    <div class="color-picker">
+                        <div class="color-option yellow" ng-click="changeNoteColor('yellow')"></div>
+                        <div class="color-option pink" ng-click="changeNoteColor('pink')"></div>
+                        <div class="color-option blue" ng-click="changeNoteColor('blue')"></div>
+                        <div class="color-option green" ng-click="changeNoteColor('green')"></div>
+                        <div class="color-option purple" ng-click="changeNoteColor('purple')"></div>
+                        <div class="color-option orange" ng-click="changeNoteColor('orange')"></div>
+                    </div>
                 </div>
             </div>
         </div>
