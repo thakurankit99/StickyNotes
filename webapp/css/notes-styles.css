@@ -216,6 +216,7 @@ body.drag-over:before {
     align-items: center;
     justify-content: center;
     transition: transform 0.2s, background-color 0.2s;
+    display: none !important;
 }
 
 .floating-add-note-btn:hover {
@@ -235,6 +236,7 @@ body.drag-over:before {
     font-family: 'Indie Flower', cursive;
     z-index: 100;
     transition: box-shadow 0.3s;
+    display: none !important;
 }
 
 .floating-note:hover {
