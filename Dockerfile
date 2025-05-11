@@ -107,4 +107,4 @@ RUN chmod +x /home/plik/build-for-render.sh && \
 EXPOSE 8080
 USER plik
 WORKDIR /home/plik/server
-CMD ./plikd
+CMD ["./plikd"]
