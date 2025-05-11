@@ -549,8 +549,8 @@ plik.controller('MainCtrl', ['$scope', '$api', '$config', '$route', '$location',
         };
 
         $scope.ttlUnits = ["days", "hours", "minutes"];
-        $scope.ttlUnit = "days";
-        $scope.ttlValue = 30;
+        $scope.ttlUnit = "minutes";
+        $scope.ttlValue = 10;
 
         // Check TTL value
         $scope.checkTTL = function () {
@@ -598,13 +598,21 @@ plik.controller('MainCtrl', ['$scope', '$api', '$config', '$route', '$location',
                 // Never expiring upload is allowed
                 $scope.ttlUnits = ["days", "hours", "minutes", "unlimited"];
             }
-            if ($scope.user && $scope.user.maxTTL > 0 && $scope.config.defaultTTL > $scope.user.maxTTL) {
-                // If user maxTTL is less than defaultTTL then set to user maxTTL to avoid error on upload
-                $scope.config.defaultTTL = $scope.user.maxTTL;
+            
+            // Set default to 10 minutes regardless of server config
+            $scope.ttlValue = 10;
+            $scope.ttlUnit = "minutes";
+            
+            // But still check against max TTL if necessary
+            if ($scope.user && $scope.user.maxTTL > 0) {
+                var defaultTTL = getTTL($scope.ttlValue, $scope.ttlUnit);
+                if (defaultTTL > $scope.user.maxTTL) {
+                    // If our default TTL exceeds user maxTTL, use the max TTL instead
+                    var ttl = getHumanReadableTTL($scope.user.maxTTL);
+                    $scope.ttlValue = ttl[0];
+                    $scope.ttlUnit = ttl[1];
+                }
             }
-            var ttl = getHumanReadableTTL($scope.config.defaultTTL);
-            $scope.ttlValue = ttl[0];
-            $scope.ttlUnit = ttl[1];
         };
 
         // Return upload expiration date string
