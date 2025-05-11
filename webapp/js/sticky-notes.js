@@ -15,7 +15,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();
         addWelcomeNote(); // Activate the welcome note
-        // setupFloatingNotes(); // We no longer need this as BoardCtrl handles the notes
+        // Note: We no longer need setupFloatingNotes as we use the board in main.html
     });
 
     // Setup whole-page drag and drop
@@ -145,14 +145,14 @@
                 This app helps you create and share notes with anyone. You can:
             </p>
             <ul style="font-size:16px;line-height:1.5;">
-                <li>📝 Create text notes</li>
-                <li>📎 Attach images and documents</li>
+                <li>📝 Create and organize sticky notes on your board</li>
+                <li>📎 Attach images and documents to your notes</li>
                 <li>🔗 Share notes with a simple link</li>
                 <li>⏱️ Set notes to expire automatically</li>
-                <li>🎯 Try our new sticky board on the home page!</li>
+                <li>🎨 Customize your notes with different colors</li>
             </ul>
             <p style="font-size:16px;line-height:1.5;">
-                Just click the "Add Note" button to start creating sticky notes on your board!
+                Click the <strong>"Add Note"</strong> button in the left menu to create your first sticky note!
             </p>
         `;
         

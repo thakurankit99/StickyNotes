@@ -1,7 +1,26 @@
-
-
 <div id="maindiv" class="row">
     <div class="col-sm-3 center-block">
+        <!-- STICKY BOARD MENU -->
+        <div class="tile menu">
+            <div class="menu-item">
+                <h4 class="text-center">Sticky Board</h4>
+                <p class="text-center small">Create and organize your sticky notes</p>
+                <button type="button" class="btn btn-lg btn-primary btn-block" ng-click="addStickyNote()">
+                    <i class="fa fa-sticky-note"></i> Add Note
+                </button>
+            </div>
+            <div class="menu-item">
+                <button type="button" class="btn btn-success btn-block" ng-click="saveBoard()">
+                    <i class="fa fa-save"></i> Save Board
+                </button>
+            </div>
+            <div class="menu-item">
+                <button type="button" class="btn btn-default btn-block" ng-click="clearBoard()">
+                    <i class="fa fa-trash"></i> Clear Board
+                </button>
+            </div>
+        </div>
+        
         <!-- UPLOAD MENU -->
         <div class="tile menu" ng-if="mode == 'upload'">
             <!-- ONE SHOT -->
@@ -178,45 +197,15 @@
                 </button>
             </div>
         </div>
-        
-        <!-- STICKY BOARD MENU -->
-        <div class="tile menu">
-            <div class="menu-item">
-                <h4 class="text-center">Sticky Board</h4>
-                <p class="text-center small">Create and organize sticky notes on your personal board</p>
-                <button type="button" class="btn btn-lg btn-primary btn-block" ng-click="addStickyNote()">
-                    <i class="fa fa-sticky-note"></i> Add Note
-                </button>
-            </div>
-            <div class="menu-item">
-                <button type="button" class="btn btn-success btn-block" ng-click="saveBoard()">
-                    <i class="fa fa-save"></i> Save Board
-                </button>
-            </div>
-            <div class="menu-item">
-                <button type="button" class="btn btn-default btn-block" ng-click="clearBoard()">
-                    <i class="fa fa-trash"></i> Clear Board
-                </button>
-            </div>
-        </div>
     </div>
 
     <!-- MAIN -->
     <div class="col-sm-9">
-        <!-- COMMENTS -->
-        <div class="row" ng-show="upload.comments">
-            <div class="col-sm-12">
-                <div class="tile text-center">
-                    <div class="comments" btf-markdown="upload.comments">
-                    </div>
-                </div>
-            </div>
-        </div>
-        
         <!-- STICKY BOARD -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="board-container" id="notes-board" ng-controller="BoardCtrl">
+                    <h3 class="board-title">My Sticky Notes</h3>
                     <!-- Notes will be dynamically added here -->
                     <div class="board-sticky-note note-{{note.color}}" 
                          ng-repeat="note in notes" 
@@ -241,6 +230,16 @@
                         <div class="color-option" style="background-color: #a2d8ff;" ng-click="changeNoteColor('blue')"></div>
                         <div class="color-option" style="background-color: #b5f587;" ng-click="changeNoteColor('green')"></div>
                         <div class="color-option" style="background-color: #d8b5ff;" ng-click="changeNoteColor('purple')"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- COMMENTS -->
+        <div class="row" ng-show="upload.comments">
+            <div class="col-sm-12">
+                <div class="tile text-center">
+                    <div class="comments" btf-markdown="upload.comments">
                     </div>
                 </div>
             </div>
