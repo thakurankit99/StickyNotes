@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: stickynotes
+    name: plik-sticky-notes
     env: docker
     dockerfilePath: ./Dockerfile
     plan: free
@@ -11,7 +11,9 @@ services:
         value: /tmp/nginx-logs
       - key: TMPDIR
         value: /tmp
-    healthCheckPath: /config
+      - key: PORT
+        value: 80
+    healthCheckPath: /
     buildCommand: ./build-for-render.sh
     staticPublishPath: ./webapp
     headers:

@@ -33,36 +33,42 @@ body {
     background-image: url('https://images.unsplash.com/photo-1595932655357-496799e6be40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') !important;
     background-size: cover !important;
     background-attachment: fixed !important;
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-theme body {
+    background-image: url('https://images.unsplash.com/photo-1557682250-491c828ada9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') !important;
 }
 
 .tile {
-    background-color: #fefabc !important;
+    background-color: var(--tile-bg) !important;
     border-radius: 2px !important;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 2px 2px 8px var(--shadow-color) !important;
     transform: rotate(0.5deg) !important;
-    transition: transform 0.2s ease !important;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease !important;
     font-family: 'Indie Flower', cursive !important;
     position: relative !important;
 }
 
 .tile:nth-child(even) {
-    background-color: #fff9b1 !important;
+    background-color: var(--tile-bg-alt) !important;
     transform: rotate(-0.5deg) !important;
 }
 
 .tile:nth-child(3n) {
-    background-color: #fffa9c !important;
+    background-color: var(--tile-bg-third) !important;
     transform: rotate(1deg) !important;
 }
 
 .tile:hover {
     transform: scale(1.02) rotate(0deg) !important;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 5px 5px 15px var(--shadow-color-hover) !important;
     z-index: 2 !important;
 }
 
 .menu {
-    background-color: #ff9b73 !important;
+    background-color: var(--menu-bg) !important;
 }
 
 .menu:hover {
@@ -75,14 +81,14 @@ header {
 }
 
 header h1 a, header h1 a:hover {
-    color: #ff6b35 !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+    color: var(--header-text) !important;
+    text-shadow: 1px 1px 2px var(--header-shadow) !important;
     font-weight: bold !important;
 }
 
 .tagline {
     font-size: 16px !important;
-    color: #333 !important;
+    color: var(--text-color) !important;
     margin-top: -10px !important;
     font-style: italic !important;
     text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5) !important;
@@ -105,6 +111,34 @@ header h1 a, header h1 a:hover {
 
 footer {
     background-color: transparent !important;
-    color: #333 !important;
+    color: var(--text-color) !important;
     font-family: 'Indie Flower', cursive !important;
+}
+
+/* Theme toggle */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--control-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px var(--shadow-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--button-bg);
+}
+
+.theme-toggle i {
+    color: var(--text-color);
+    font-size: 18px;
 }

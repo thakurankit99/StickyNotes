@@ -10,6 +10,7 @@
     <title ng-bind="title"></title>
 
     <!-- CSS -->
+    <link href="css/themes.css" rel="stylesheet" type="text/css">
     <link href="css/vendor.css" rel="stylesheet" type="text/css">
     <link href="css/app.css" rel="stylesheet" type="text/css">
     <link href="css/custom.css" rel="stylesheet" type="text/css">
@@ -49,6 +50,11 @@
 
     <!-- ANGULARJS VIEW -->
     <div id="angular-view" ng-view class="container-fluid"></div>
+    
+    <!-- THEME TOGGLE -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fa fa-moon-o" id="theme-icon"></i>
+    </div>
 </div>
 
 <!-- FOOTER -->
@@ -70,6 +76,41 @@
 <!-- sticky notes enhancements -->
 <script src="js/sticky-notes.js" type="text/javascript"></script>
 <script src="js/board-controller.js" type="text/javascript"></script>
+
+<!-- Theme handling -->
+<script>
+    // Initialize theme based on user preference
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (savedTheme !== 'light' && prefersDark)) {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-icon').className = 'fa fa-sun-o';
+        } else {
+            document.body.classList.add('light-theme');
+            document.getElementById('theme-icon').className = 'fa fa-moon-o';
+        }
+    }
+    
+    // Toggle between light and dark theme
+    function toggleTheme() {
+        if (document.body.classList.contains('dark-theme')) {
+            document.body.classList.remove('dark-theme');
+            document.body.classList.add('light-theme');
+            localStorage.setItem('theme', 'light');
+            document.getElementById('theme-icon').className = 'fa fa-moon-o';
+        } else {
+            document.body.classList.remove('light-theme');
+            document.body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
+            document.getElementById('theme-icon').className = 'fa fa-sun-o';
+        }
+    }
+    
+    // Initialize theme on page load
+    document.addEventListener('DOMContentLoaded', initTheme);
+</script>
 
 </body>
 </html>

@@ -4,16 +4,16 @@
     width: 100%;
     min-height: 500px;
     max-height: 800px; /* Default max height that can be adjusted */
-    background-color: #f5f5f5;
+    background-color: var(--board-bg);
     background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" fill="%23f0f0f0"/><rect x="10" y="10" width="10" height="10" fill="%23f0f0f0"/></svg>');
     padding: 20px;
     margin-bottom: 30px;
     border-radius: 5px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 10px var(--shadow-color);
     overflow: hidden;
-    border: 2px dashed #ddd;
+    border: 2px dashed var(--border-color);
     /* Add transition for smooth resizing */
-    transition: height 0.2s ease;
+    transition: height 0.2s ease, background-color 0.3s ease;
     /* Set initial height */
     height: 500px;
 }
@@ -26,7 +26,7 @@
     bottom: 0;
     left: 0;
     cursor: ns-resize;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--shadow-color);
     border-radius: 0 0 5px 5px;
     display: flex;
     justify-content: center;
@@ -35,12 +35,13 @@
 }
 
 .board-resize-handle:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--shadow-color-hover);
 }
 
 .board-resize-handle:after {
     content: "═══";
-    color: rgba(0, 0, 0, 0.3);
+    color: var(--text-color);
+    opacity: 0.5;
     font-size: 10px;
     letter-spacing: 2px;
 }
@@ -49,10 +50,11 @@
     position: absolute;
     right: 15px;
     bottom: 15px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--control-bg);
     padding: 3px 6px;
     border-radius: 3px;
     font-size: 12px;
+    color: var(--text-color);
     opacity: 0;
     transition: opacity 0.2s;
     z-index: 11;
@@ -75,8 +77,9 @@
     width: 28px;
     height: 28px;
     border-radius: 3px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ddd;
+    background-color: var(--control-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -85,12 +88,12 @@
 }
 
 .board-size-button:hover {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--button-bg);
 }
 
 .board-title {
     font-family: 'Indie Flower', cursive;
-    color: #333;
+    color: var(--text-color);
     text-align: center;
     margin-top: 0;
     margin-bottom: 20px;
@@ -175,29 +178,49 @@
     bottom: 5px;
     right: 5px;
     display: none;
+    gap: 8px;
+    z-index: 5;
 }
 
 .board-sticky-note:hover .note-actions {
     display: flex;
-    gap: 5px;
+    gap: 8px;
 }
 
 .board-sticky-note .note-actions button {
     border: none;
-    background: transparent;
-    width: 24px;
-    height: 24px;
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.7;
+    opacity: 0.9;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 10;
 }
 
 .board-sticky-note .note-actions button:hover {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.board-sticky-note .note-actions button i {
+    font-size: 16px;
+    color: #333;
+}
+
+.board-sticky-note .note-actions button.delete-note {
+    background-color: rgba(255, 100, 100, 0.2);
+}
+
+.board-sticky-note .note-actions button.delete-note:hover {
+    background-color: rgba(255, 100, 100, 0.4);
 }
 
 .resize-handle {
@@ -212,16 +235,16 @@
 
 /* Note colors */
 .note-yellow {
-    background-color: #fefabc;
+    background-color: var(--note-yellow);
     transform: rotate(1deg);
 }
 
 .note-yellow:before {
-    background-color: #ff6b35;
+    background-color: var(--header-text);
 }
 
 .note-pink {
-    background-color: #ff9b9b;
+    background-color: var(--note-pink);
     transform: rotate(-1deg);
 }
 
@@ -230,7 +253,7 @@
 }
 
 .note-blue {
-    background-color: #a2d8ff;
+    background-color: var(--note-blue);
     transform: rotate(1.5deg);
 }
 
@@ -239,7 +262,7 @@
 }
 
 .note-green {
-    background-color: #b5f587;
+    background-color: var(--note-green);
     transform: rotate(-0.5deg);
 }
 
@@ -248,7 +271,7 @@
 }
 
 .note-purple {
-    background-color: #d8b5ff;
+    background-color: var(--note-purple);
     transform: rotate(0.8deg);
 }
 
@@ -283,10 +306,10 @@
 
 .color-picker {
     position: absolute;
-    background-color: white;
+    background-color: var(--button-bg);
     border-radius: 8px;
     padding: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px var(--shadow-color);
     display: none;
     flex-direction: row;
     gap: 8px;
@@ -294,7 +317,7 @@
     transform: scale(0.95);
     transition: transform 0.15s ease, opacity 0.15s ease;
     opacity: 0;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
 }
 
 /* Pointer triangle for the color picker */
@@ -308,7 +331,7 @@
     left: -10px;
     top: 12px;
     border-width: 8px 10px 8px 0;
-    border-color: transparent white transparent transparent;
+    border-color: transparent var(--button-bg) transparent transparent;
 }
 
 /* Class for when the picker appears on the left side of a note */
@@ -316,7 +339,7 @@
     left: auto;
     right: -10px;
     border-width: 8px 0 8px 10px;
-    border-color: transparent transparent transparent white;
+    border-color: transparent transparent transparent var(--button-bg);
 }
 
 .color-picker.visible {
@@ -364,7 +387,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: #999;
+    color: var(--text-color);
+    opacity: 0.6;
     font-family: 'Indie Flower', cursive;
     font-size: 18px;
     display: none;

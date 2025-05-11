@@ -16,18 +16,21 @@ RUN touch /webapp/js/sticky-notes.js
 RUN touch /webapp/js/board-controller.js
 RUN touch /webapp/css/notes-styles.css
 RUN touch /webapp/css/board-view.css
+RUN touch /webapp/css/themes.css
 
 # Copy our custom files to webapp directory
 COPY webapp/js/sticky-notes.js /webapp/js/sticky-notes.js
 COPY webapp/js/board-controller.js /webapp/js/board-controller.js
 COPY webapp/css/notes-styles.css /webapp/css/notes-styles.css
 COPY webapp/css/board-view.css /webapp/css/board-view.css
+COPY webapp/css/themes.css /webapp/css/themes.css
 
 # Also copy them to the dist directory to ensure they're included
 COPY webapp/js/sticky-notes.js /webapp/dist/js/sticky-notes.js
 COPY webapp/js/board-controller.js /webapp/dist/js/board-controller.js
 COPY webapp/css/notes-styles.css /webapp/dist/css/notes-styles.css
 COPY webapp/css/board-view.css /webapp/dist/css/board-view.css
+COPY webapp/css/themes.css /webapp/dist/css/themes.css
 
 # Run the frontend build
 RUN make clean-frontend frontend
@@ -37,6 +40,7 @@ RUN cp -f /webapp/js/sticky-notes.js /webapp/dist/js/ || true
 RUN cp -f /webapp/js/board-controller.js /webapp/dist/js/ || true
 RUN cp -f /webapp/css/notes-styles.css /webapp/dist/css/ || true
 RUN cp -f /webapp/css/board-view.css /webapp/dist/css/ || true
+RUN cp -f /webapp/css/themes.css /webapp/dist/css/ || true
 
 ##################################################################################
 FROM --platform=$BUILDPLATFORM golang:1-bullseye AS plik-builder
@@ -150,6 +154,7 @@ COPY --from=plik-frontend-builder /webapp/dist/js/sticky-notes.js /home/plik/web
 COPY --from=plik-frontend-builder /webapp/dist/js/board-controller.js /home/plik/webapp/js/
 COPY --from=plik-frontend-builder /webapp/dist/css/notes-styles.css /home/plik/webapp/css/
 COPY --from=plik-frontend-builder /webapp/dist/css/board-view.css /home/plik/webapp/css/
+COPY --from=plik-frontend-builder /webapp/dist/css/themes.css /home/plik/webapp/css/
 
 EXPOSE 8080 8081
 USER plik

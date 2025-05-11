@@ -169,12 +169,21 @@
 
         // Delete a note from the board
         $scope.deleteNote = function(note) {
-            var index = $scope.notes.indexOf(note);
-            if (index !== -1) {
-                $scope.notes.splice(index, 1);
-                
-                // Save to localStorage
-                saveBoardState();
+            // Stop event propagation to prevent issues with parent elements
+            var event = window.event;
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            
+            if (confirm('Are you sure you want to delete this note?')) {
+                var index = $scope.notes.indexOf(note);
+                if (index !== -1) {
+                    $scope.notes.splice(index, 1);
+                    
+                    // Save to localStorage
+                    saveBoardState();
+                }
             }
         };
 
@@ -393,6 +402,7 @@
                 // Ignore if clicked on content div (for editing) or resize handle
                 if (e.target.classList.contains('note-content') || 
                     e.target.classList.contains('resize-handle') ||
+                    e.target.closest('.note-actions') ||  // Better check for buttons and their children
                     e.target.tagName === 'BUTTON' ||
                     e.target.tagName === 'I') {
                     return;
