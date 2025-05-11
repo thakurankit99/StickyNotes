@@ -4,12 +4,11 @@
 # This script detects the base URL of the application and pings it every 3 minutes
 # Logs the results to the Render logs
 
-# Log function with timestamp that writes to both stdout and the log file
+# Log function with timestamp that writes to both stdout (Render logs)
 log() {
   LOG_MESSAGE="[$(date '+%Y-%m-%d %H:%M:%S')] HEALTH CHECK: $1"
+  # Output to stdout - will appear in Render logs when run directly
   echo "$LOG_MESSAGE"
-  # Also log to stdout for Render logging
-  echo "$LOG_MESSAGE" >> /proc/1/fd/1 2>/dev/null || true
 }
 
 # Set up the cron job to run every 3 minutes
@@ -18,8 +17,8 @@ setup_cron() {
   (crontab -l 2>/dev/null | grep -v "health-check.sh") | crontab -
   
   # Add new cron job to run every 3 minutes
-  # Direct output to both a log file and to the main process stdout for Render logging
-  (crontab -l 2>/dev/null; echo "*/3 * * * * $(pwd)/health-check.sh run") | crontab -
+  # Use the render-echo helper script to ensure output goes to Render logs
+  (crontab -l 2>/dev/null; echo "*/3 * * * * /home/plik/health-check.sh run | /home/plik/render-echo.sh") | crontab -
   
   log "Cron job set up to run every 3 minutes"
 }
