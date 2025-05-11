@@ -76,8 +76,8 @@ COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/plik-
 ##################################################################################
 FROM alpine:3.18 AS plik-image
 
-# Add only necessary packages
-RUN apk add --no-cache ca-certificates
+# Add necessary packages including PostgreSQL client
+RUN apk add --no-cache ca-certificates postgresql-client
 
 # Create plik user
 ENV USER=plik
