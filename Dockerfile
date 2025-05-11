@@ -1,7 +1,7 @@
 ##################################################################################
 FROM --platform=$BUILDPLATFORM node:20-alpine AS plik-frontend-builder
 
-# Install needed binaries - only what's actually required
+# Install needed binaries
 RUN apk add --no-cache git make bash
 
 # Add the source code
@@ -11,33 +11,38 @@ COPY webapp /webapp
 # Make sure our custom directories exist
 RUN mkdir -p /webapp/js /webapp/css /webapp/dist/js /webapp/dist/css
 
-# Create our custom files in a single layer to reduce build time
-RUN touch /webapp/js/sticky-notes.js \
-    /webapp/js/board-controller.js \
-    /webapp/css/notes-styles.css \
-    /webapp/css/board-view.css \
-    /webapp/css/themes.css
+# Create our custom JS and CSS files if they don't exist
+RUN touch /webapp/js/sticky-notes.js
+RUN touch /webapp/js/board-controller.js
+RUN touch /webapp/css/notes-styles.css
+RUN touch /webapp/css/board-view.css
 
-# Copy our custom files in a single step to reduce layers
-COPY webapp/js/sticky-notes.js webapp/js/board-controller.js /webapp/js/
-COPY webapp/css/notes-styles.css webapp/css/board-view.css webapp/css/themes.css /webapp/css/
+# Copy our custom files to webapp directory
+COPY webapp/js/sticky-notes.js /webapp/js/sticky-notes.js
+COPY webapp/js/board-controller.js /webapp/js/board-controller.js
+COPY webapp/css/notes-styles.css /webapp/css/notes-styles.css
+COPY webapp/css/board-view.css /webapp/css/board-view.css
 
-# Also copy them to the dist directory to ensure they're included (in one command)
-RUN cp -f /webapp/js/sticky-notes.js /webapp/js/board-controller.js /webapp/dist/js/ || true && \
-    cp -f /webapp/css/notes-styles.css /webapp/css/board-view.css /webapp/css/themes.css /webapp/dist/css/ || true
+# Also copy them to the dist directory to ensure they're included
+COPY webapp/js/sticky-notes.js /webapp/dist/js/sticky-notes.js
+COPY webapp/js/board-controller.js /webapp/dist/js/board-controller.js
+COPY webapp/css/notes-styles.css /webapp/dist/css/notes-styles.css
+COPY webapp/css/board-view.css /webapp/dist/css/board-view.css
 
 # Run the frontend build
 RUN make clean-frontend frontend
 
-# Make sure our custom files are still in the dist directory after build (in one command)
-RUN cp -f /webapp/js/sticky-notes.js /webapp/js/board-controller.js /webapp/dist/js/ || true && \
-    cp -f /webapp/css/notes-styles.css /webapp/css/board-view.css /webapp/css/themes.css /webapp/dist/css/ || true
+# Make sure our custom files are still in the dist directory after build
+RUN cp -f /webapp/js/sticky-notes.js /webapp/dist/js/ || true
+RUN cp -f /webapp/js/board-controller.js /webapp/dist/js/ || true
+RUN cp -f /webapp/css/notes-styles.css /webapp/dist/css/ || true
+RUN cp -f /webapp/css/board-view.css /webapp/dist/css/ || true
 
 ##################################################################################
-FROM --platform=$BUILDPLATFORM golang:1-alpine AS plik-builder
+FROM --platform=$BUILDPLATFORM golang:1-bullseye AS plik-builder
 
-# Install only needed packages for build - alpine version is much smaller and faster
-RUN apk add --no-cache git make build-base
+# Install needed binaries
+RUN apt-get update && apt-get install -y build-essential crossbuild-essential-armhf crossbuild-essential-armel crossbuild-essential-arm64 crossbuild-essential-i386 git
 
 # Prepare the source location
 RUN mkdir -p /go/src/github.com/root-gg/plik
@@ -46,17 +51,30 @@ WORKDIR /go/src/github.com/root-gg/plik
 # Copy webapp build from previous stage
 COPY --from=plik-frontend-builder /webapp/dist webapp/dist
 
-# Add the source code (see .dockerignore)
+# Ensure our custom JS and CSS directories exist
+RUN mkdir -p webapp/dist/js webapp/dist/css
+
+# Initialize git repository and set a version
+RUN git init && \
+    git config --global user.email "docker@build.local" && \
+    git config --global user.name "Docker Build"
+
+# Add the source code ( see .dockerignore )
 COPY . .
 
-# Skip git operations for faster builds
-# Just generate the build info directly
-RUN mkdir -p server/bin && \
-    echo 'package main\n\nconst (\n  BuildInfo = "Custom build"\n  BuildDate = "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"\n)' > server/common/buildinfo.go
+# Make all scripts executable, create git tag, and run the releaser
+RUN chmod +x releaser/releaser.sh && \
+    chmod +x server/gen_build_info.sh && \
+    find . -name "*.sh" -type f -exec chmod +x {} \; && \
+    git add . && \
+    git commit -m "Docker build commit" && \
+    git tag -a "v1.0.0" -m "Docker build tag" && \
+    releaser/releaser.sh
 
-# Skip the releaser and compile directly 
-RUN cd server && go build -o plikd && \
-    cd ../client && go build -o plik
+##################################################################################
+FROM scratch AS plik-release-archive
+
+COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/plik-*.tar.gz /
 
 ##################################################################################
 FROM alpine:3.18 AS plik-image
@@ -76,13 +94,7 @@ RUN adduser \
     --uid "${UID}" \
     "${USER}"
 
-# Create the directory structure
-RUN mkdir -p /home/plik/server /home/plik/webapp /home/plik/client
-
-# Copy only what's needed from the builder
-COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/server/plikd /home/plik/server/
-COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/client/plik /home/plik/client/
-COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/webapp/dist /home/plik/webapp/
+COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/release /home/plik/
 
 # Create required Nginx directories and set proper permissions
 RUN mkdir -p /var/lib/nginx/logs /var/lib/nginx/tmp/client_body /var/lib/nginx/tmp/proxy \
@@ -132,6 +144,12 @@ RUN echo '#!/bin/sh' > /home/plik/start.sh && \
 COPY render-init.sh /home/plik/render-init.sh
 RUN chmod +x /home/plik/render-init.sh && \
     chown ${UID}:${UID} /home/plik/render-init.sh
+
+# Copy the JS/CSS files from builder to final image
+COPY --from=plik-frontend-builder /webapp/dist/js/sticky-notes.js /home/plik/webapp/js/
+COPY --from=plik-frontend-builder /webapp/dist/js/board-controller.js /home/plik/webapp/js/
+COPY --from=plik-frontend-builder /webapp/dist/css/notes-styles.css /home/plik/webapp/css/
+COPY --from=plik-frontend-builder /webapp/dist/css/board-view.css /home/plik/webapp/css/
 
 EXPOSE 8080 8081
 USER plik
