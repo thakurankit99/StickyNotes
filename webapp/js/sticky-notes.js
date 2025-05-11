@@ -3,6 +3,14 @@
  * Adds whole-page drag and drop and sticky notes features
  */
 (function() {
+    // Add the board route to the Angular app
+    angular.module('plik').config(['$routeProvider', function($routeProvider) {
+        $routeProvider.when('/board', {
+            templateUrl: 'partials/board.html',
+            controller: 'BoardCtrl'
+        });
+    }]);
+    
     // Wait for document to be ready
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();
@@ -140,6 +148,7 @@
                 <li>📎 Attach images and documents</li>
                 <li>🔗 Share notes with a simple link</li>
                 <li>⏱️ Set notes to expire automatically</li>
+                <li>🎯 Try our new <a href="#/board" style="color:#ff6b35;text-decoration:underline;">Sticky Board</a> feature!</li>
             </ul>
             <p style="font-size:16px;line-height:1.5;">
                 Just drag and drop content anywhere on this page to get started!

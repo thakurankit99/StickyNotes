@@ -1,0 +1,228 @@
+/* Sticky Notes Board View */
+.board-container {
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    background-color: #f5f5f5;
+    background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" fill="%23f0f0f0"/><rect x="10" y="10" width="10" height="10" fill="%23f0f0f0"/></svg>');
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.board-header h2 {
+    font-family: 'Indie Flower', cursive;
+    color: #333;
+    margin: 0;
+}
+
+.board-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.board-sticky-note {
+    position: absolute;
+    min-width: 150px;
+    min-height: 150px;
+    padding: 20px;
+    border-radius: 2px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Indie Flower', cursive;
+    cursor: move;
+    z-index: 1;
+    transition: transform 0.1s, box-shadow 0.3s;
+    overflow: hidden;
+}
+
+.board-sticky-note:hover {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.board-sticky-note:before {
+    content: "";
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.board-sticky-note:after {
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 5px;
+    bottom: -5px;
+    left: 5%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 5px 5px;
+}
+
+.board-sticky-note .note-content {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background: transparent;
+    border: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.board-sticky-note .note-actions {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    display: none;
+}
+
+.board-sticky-note:hover .note-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.board-sticky-note .note-actions button {
+    border: none;
+    background: transparent;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+}
+
+.board-sticky-note .note-actions button:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.resize-handle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    bottom: 5px;
+    right: 5px;
+    cursor: nwse-resize;
+    opacity: 0.5;
+}
+
+/* Note colors */
+.note-yellow {
+    background-color: #fefabc;
+    transform: rotate(1deg);
+}
+
+.note-yellow:before {
+    background-color: #ff6b35;
+}
+
+.note-pink {
+    background-color: #ff9b9b;
+    transform: rotate(-1deg);
+}
+
+.note-pink:before {
+    background-color: #e86464;
+}
+
+.note-blue {
+    background-color: #a2d8ff;
+    transform: rotate(1.5deg);
+}
+
+.note-blue:before {
+    background-color: #4ecdc4;
+}
+
+.note-green {
+    background-color: #b5f587;
+    transform: rotate(-0.5deg);
+}
+
+.note-green:before {
+    background-color: #7bc950;
+}
+
+.note-purple {
+    background-color: #d8b5ff;
+    transform: rotate(0.8deg);
+}
+
+.note-purple:before {
+    background-color: #9b59b6;
+}
+
+.add-note-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ff6b35;
+    color: white;
+    border: none;
+    font-size: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.add-note-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.color-picker {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 999;
+}
+
+.color-picker.visible {
+    display: flex;
+}
+
+.color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s;
+}
+
+.color-option:hover {
+    transform: scale(1.2);
+    border-color: white;
+} 

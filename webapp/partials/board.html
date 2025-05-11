@@ -1,0 +1,68 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="board-header">
+                <h2>My Sticky Notes Board</h2>
+                <div class="board-actions">
+                    <button class="btn btn-primary" ng-click="saveBoard()">
+                        <i class="fa fa-save"></i> Save Board
+                    </button>
+                    <button class="btn btn-default" ng-click="shareBoard()">
+                        <i class="fa fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+            
+            <div class="board-container" id="notes-board">
+                <!-- Notes will be dynamically added here -->
+                <div class="board-sticky-note note-{{note.color}}" 
+                     ng-repeat="note in notes" 
+                     ng-style="{'left': note.x + 'px', 'top': note.y + 'px', 'width': note.width + 'px', 'height': note.height + 'px', 'z-index': note.zIndex}"
+                     data-id="{{note.id}}"
+                     draggable="true">
+                    <div class="note-content" contenteditable="true" ng-model="note.content">{{note.content}}</div>
+                    <div class="note-actions">
+                        <button title="Change Color" ng-click="openColorPicker(note)">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <button title="Delete Note" ng-click="deleteNote(note)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="resize-handle"></div>
+                </div>
+            </div>
+            
+            <button class="add-note-button" ng-click="addNote()">+</button>
+            
+            <div class="color-picker" id="color-picker">
+                <div class="color-option" style="background-color: #fefabc;" ng-click="changeNoteColor('yellow')"></div>
+                <div class="color-option" style="background-color: #ff9b9b;" ng-click="changeNoteColor('pink')"></div>
+                <div class="color-option" style="background-color: #a2d8ff;" ng-click="changeNoteColor('blue')"></div>
+                <div class="color-option" style="background-color: #b5f587;" ng-click="changeNoteColor('green')"></div>
+                <div class="color-option" style="background-color: #d8b5ff;" ng-click="changeNoteColor('purple')"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Board Tips</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li>Click the + button to add a new note</li>
+                        <li>Drag notes to reposition them</li>
+                        <li>Click and edit text directly on notes</li>
+                        <li>Use the paint brush icon to change note color</li>
+                        <li>Drag the bottom-right corner to resize notes</li>
+                        <li>Double-click on a note to edit its content</li>
+                        <li>Click "Save Board" to save your layout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
