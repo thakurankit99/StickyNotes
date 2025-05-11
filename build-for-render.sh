@@ -19,7 +19,8 @@ for file in "webapp/js/sticky-notes.js" "webapp/js/board-controller.js" "webapp/
     fi
 done
 
-# Ensure the render-init.sh script is executable
+# Ensure scripts are executable
 chmod +x render-init.sh
+find . -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null || true
 
 echo "Setup completed successfully" 

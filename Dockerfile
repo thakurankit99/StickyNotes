@@ -8,31 +8,19 @@ RUN apk add --no-cache git make bash
 COPY Makefile .
 COPY webapp /webapp
 
-# Make sure our custom directories exist
+# Ensure our custom directories exist
 RUN mkdir -p /webapp/js /webapp/css /webapp/dist/js /webapp/dist/css
 
-# Create our custom JS and CSS files if they don't exist
-RUN touch /webapp/js/sticky-notes.js
-RUN touch /webapp/js/board-controller.js
-RUN touch /webapp/css/notes-styles.css
-RUN touch /webapp/css/board-view.css
-
-# Copy our custom files to webapp directory
+# Copy our sticky notes files to webapp directory
 COPY webapp/js/sticky-notes.js /webapp/js/sticky-notes.js
 COPY webapp/js/board-controller.js /webapp/js/board-controller.js
 COPY webapp/css/notes-styles.css /webapp/css/notes-styles.css
 COPY webapp/css/board-view.css /webapp/css/board-view.css
 
-# Also copy them to the dist directory to ensure they're included
-COPY webapp/js/sticky-notes.js /webapp/dist/js/sticky-notes.js
-COPY webapp/js/board-controller.js /webapp/dist/js/board-controller.js
-COPY webapp/css/notes-styles.css /webapp/dist/css/notes-styles.css
-COPY webapp/css/board-view.css /webapp/dist/css/board-view.css
-
 # Run the frontend build
 RUN make clean-frontend frontend
 
-# Make sure our custom files are still in the dist directory after build
+# Ensure our custom files are preserved after build
 RUN cp -f /webapp/js/sticky-notes.js /webapp/dist/js/ || true
 RUN cp -f /webapp/js/board-controller.js /webapp/dist/js/ || true
 RUN cp -f /webapp/css/notes-styles.css /webapp/dist/css/ || true
@@ -59,6 +47,15 @@ RUN git init && \
     git config --global user.email "docker@build.local" && \
     git config --global user.name "Docker Build"
 
+ARG CLIENT_TARGETS=""
+ENV CLIENT_TARGETS=$CLIENT_TARGETS
+
+ARG TARGETOS TARGETARCH TARGETVARIANT CC
+ENV TARGETOS=$TARGETOS
+ENV TARGETARCH=$TARGETARCH
+ENV TARGETVARIANT=$TARGETVARIANT
+ENV CC=$CC
+
 # Add the source code ( see .dockerignore )
 COPY . .
 
@@ -79,7 +76,7 @@ COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/plik-
 ##################################################################################
 FROM alpine:3.18 AS plik-image
 
-# We're removing Nginx and just using plikd with its built-in server
+# Add only necessary packages
 RUN apk add --no-cache ca-certificates
 
 # Create plik user
@@ -94,32 +91,20 @@ RUN adduser \
     --uid "${UID}" \
     "${USER}"
 
+# Copy release files
 COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/release /home/plik/
 
-# Create a startup script - without Nginx
-RUN echo '#!/bin/sh' > /home/plik/start.sh && \
-    echo 'cd /home/plik/server' >> /home/plik/start.sh && \
-    echo './plikd "$@"' >> /home/plik/start.sh && \
-    chmod +x /home/plik/start.sh && \
-    chown ${UID}:${UID} /home/plik/start.sh
-
-# Copy the render init script - simplified without Nginx references
+# Copy the render init script (needed for Render.com deployment)
 COPY render-init.sh /home/plik/render-init.sh
 RUN chmod +x /home/plik/render-init.sh && \
     chown ${UID}:${UID} /home/plik/render-init.sh
 
-# Make sure build-for-render.sh is executable if it exists
+# Copy the build-for-render script
 COPY build-for-render.sh /home/plik/build-for-render.sh
 RUN chmod +x /home/plik/build-for-render.sh && \
     chown ${UID}:${UID} /home/plik/build-for-render.sh
 
-# Copy the JS/CSS files from builder to final image
-COPY --from=plik-frontend-builder /webapp/dist/js/sticky-notes.js /home/plik/webapp/js/
-COPY --from=plik-frontend-builder /webapp/dist/js/board-controller.js /home/plik/webapp/js/
-COPY --from=plik-frontend-builder /webapp/dist/css/notes-styles.css /home/plik/webapp/css/
-COPY --from=plik-frontend-builder /webapp/dist/css/board-view.css /home/plik/webapp/css/
-
 EXPOSE 8080
 USER plik
-WORKDIR /home/plik
-CMD ["./start.sh"]
+WORKDIR /home/plik/server
+CMD ./plikd

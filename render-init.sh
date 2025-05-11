@@ -9,6 +9,6 @@ chmod -R 777 /tmp/plik
 # Set environment variables
 export TMPDIR=/tmp/plik
 
-# Start the application
-cd /home/plik
-./start.sh 
+# Start the application (move to server directory and run plikd)
+cd /home/plik/server
+./plikd 
