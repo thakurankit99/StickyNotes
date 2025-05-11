@@ -83,8 +83,8 @@ COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/plik-
 ##################################################################################
 FROM alpine:3.18 AS plik-image
 
-# Add only necessary packages
-RUN apk add --no-cache ca-certificates
+# Add necessary packages
+RUN apk add --no-cache ca-certificates curl bc coreutils bash grep sed
 
 # Create plik user
 ENV USER=plik
@@ -94,7 +94,7 @@ RUN adduser \
     --disabled-password \
     --gecos "" \
     --home "/home/plik" \
-    --shell "/bin/false" \
+    --shell "/bin/bash" \
     --uid "${UID}" \
     "${USER}"
 
@@ -110,6 +110,19 @@ RUN chmod +x /home/plik/render-init.sh && \
 COPY build-for-render.sh /home/plik/build-for-render.sh
 RUN chmod +x /home/plik/build-for-render.sh && \
     chown ${UID}:${UID} /home/plik/build-for-render.sh
+
+# Copy health check scripts
+COPY health-check.sh /home/plik/health-check.sh
+COPY monitor-health.sh /home/plik/monitor-health.sh
+RUN chmod +x /home/plik/health-check.sh && \
+    chmod +x /home/plik/monitor-health.sh && \
+    chown ${UID}:${UID} /home/plik/health-check.sh && \
+    chown ${UID}:${UID} /home/plik/monitor-health.sh
+
+# Create log directory
+RUN mkdir -p /var/log && \
+    touch /var/log/health-check.log && \
+    chown -R ${UID}:${UID} /var/log
 
 EXPOSE 8080
 USER plik
