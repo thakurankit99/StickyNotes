@@ -11,6 +11,21 @@
         });
     }]);
     
+    // Extend the MainCtrl to add toggleNoteSettings function
+    angular.module('plik').run(['$rootScope', function($rootScope) {
+        // Add a function to toggle the note settings panel
+        $rootScope.toggleNoteSettings = function() {
+            var settingsPanel = document.getElementById('note-settings-panel');
+            if (settingsPanel) {
+                if (settingsPanel.style.display === 'none') {
+                    settingsPanel.style.display = 'block';
+                } else {
+                    settingsPanel.style.display = 'none';
+                }
+            }
+        };
+    }]);
+    
     // Wait for document to be ready
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();
