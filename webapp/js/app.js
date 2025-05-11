@@ -1,9 +1,9 @@
 // Plik app bootstrap and global configuration
-var plik = angular.module('plik', ['ngRoute', 'api', 'config', 'dialog', 'paste', 'contentEditable', 'btford.markdown'])
+var plik = angular.module('plik', ['ngRoute', 'ngSanitize', 'ui.bootstrap', 'plik.controllers', 'api', 'config', 'dialog', 'paste', 'contentEditable', 'btford.markdown'])
     .config(function ($routeProvider) {
         $routeProvider
-            .when('/', {controller: 'BoardCtrl', templateUrl: 'partials/board.html', reloadOnSearch: false})
-            .when('/upload', {controller: 'MainCtrl', templateUrl: 'partials/main.html', reloadOnSearch: false})
+            .when('/', {controller: 'MainCtrl', templateUrl: 'partials/main.html', reloadOnSearch: false})
+            .when('/board', {controller: 'BoardCtrl', templateUrl: 'partials/board.html', reloadOnSearch: false})
             .when('/clients', {controller: 'ClientListCtrl', templateUrl: 'partials/clients.html'})
             .when('/login', {controller: 'LoginCtrl', templateUrl: 'partials/login.html'})
             .when('/home', {controller: 'HomeCtrl', templateUrl: 'partials/home.html'})
@@ -37,17 +37,22 @@ var plik = angular.module('plik', ['ngRoute', 'api', 'config', 'dialog', 'paste'
             if (opened) return "fa fa-caret-down";
             return "fa fa-caret-right";
         }
-    });
+    })
+    .run(['$rootScope', function($rootScope) {
+        // Initialize global settings on rootScope instead of $scope
+        $rootScope.showSettings = false;
+        
+        // Add toggle function to rootScope
+        $rootScope.toggleSettings = function() {
+            $rootScope.showSettings = !$rootScope.showSettings;
+        };
+    }]);
 
-new ClipboardJS('[data-clipboard]')
+// Initialize Angular modules
+angular.module('plik.controllers', []);
 
-// Add showSettings to $scope
-$scope.showSettings = false;
-
-// Toggle settings function
-$scope.toggleSettings = function() {
-    $scope.showSettings = !$scope.showSettings;
-};
+// Clipboard initialization
+new ClipboardJS('[data-clipboard]');
 
 // Define the board controller
 plik.controller('BoardCtrl', ['$scope', '$timeout', function($scope, $timeout) {

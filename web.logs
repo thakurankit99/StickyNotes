@@ -1,0 +1,173 @@
+Navigated to https://stickynotes-imi8.onrender.com/
+content.js:2  Uncaught ReferenceError: browser is not defined
+    at Object.<anonymous> (content.js:2:84689)
+    at __webpack_require__ (content.js:2:128)
+    at Object.<anonymous> (content.js:2:79395)
+    at __webpack_require__ (content.js:2:128)
+    at Object.<anonymous> (content.js:199:16752)
+    at __webpack_require__ (content.js:2:128)
+    at Object.<anonymous> (content.js:199:11601)
+    at __webpack_require__ (content.js:2:128)
+    at Object.<anonymous> (content.js:2:73300)
+    at __webpack_require__ (content.js:2:128)
+(anonymous) @ content.js:2
+__webpack_require__ @ content.js:2
+(anonymous) @ content.js:2
+__webpack_require__ @ content.js:2
+(anonymous) @ content.js:199
+__webpack_require__ @ content.js:2
+(anonymous) @ content.js:199
+__webpack_require__ @ content.js:2
+(anonymous) @ content.js:2
+__webpack_require__ @ content.js:2
+(anonymous) @ content.js:1542
+__webpack_require__ @ content.js:2
+(anonymous) @ content.js:2
+(anonymous) @ content.js:2
+[NEW] Explain Console errors by using Copilot in Edge: click
+         
+         to explain an error. 
+        Learn more
+        Don't show again
+stickynotes-imi8.onrender.com/:1  Refused to apply style from 'https://stickynotes-imi8.onrender.com/css/board-style.css' because its MIME type ('text/plain') is not a supported stylesheet MIME type, and strict MIME checking is enabled.
+stickynotes-imi8.onrender.com/:74 
+            
+            
+            GET https://stickynotes-imi8.onrender.com/js/sticky-notes.js net::ERR_ABORTED 404 (Not Found)
+stickynotes-imi8.onrender.com/:1  Refused to apply style from 'https://stickynotes-imi8.onrender.com/css/notes-styles.css' because its MIME type ('text/plain') is not a supported stylesheet MIME type, and strict MIME checking is enabled.
+stickynotes-imi8.onrender.com/:77 
+            
+            
+            GET https://stickynotes-imi8.onrender.com/js/board.js net::ERR_ABORTED 404 (Not Found)
+app.js:45  Uncaught ReferenceError: $scope is not defined
+    at app.js:45:8
+(anonymous) @ app.js:45
+stickynotes-imi8.onrender.com/:1  Refused to execute script from 'https://stickynotes-imi8.onrender.com/js/sticky-notes.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled.
+stickynotes-imi8.onrender.com/:1  Refused to execute script from 'https://stickynotes-imi8.onrender.com/js/board.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled.
+VM218:2 Scraping links on current page
+VM218:26 Found 0 feeds on page...
+cookieCrumbler.js:1  Uncaught ReferenceError: browser is not defined
+    at 7 (cookieCrumbler.js:1:92117)
+    at __webpack_require__ (cookieCrumbler.js:1:128)
+    at 5 (cookieCrumbler.js:1:85905)
+    at __webpack_require__ (cookieCrumbler.js:1:128)
+    at 38 (cookieCrumbler.js:1:75120)
+    at __webpack_require__ (cookieCrumbler.js:1:128)
+    at 31 (cookieCrumbler.js:1:70250)
+    at __webpack_require__ (cookieCrumbler.js:1:128)
+    at 6 (cookieCrumbler.js:1:89071)
+    at __webpack_require__ (cookieCrumbler.js:1:128)
+7 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+5 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+38 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+31 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+6 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+20 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+15 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+34 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+397 @ cookieCrumbler.js:1
+__webpack_require__ @ cookieCrumbler.js:1
+(anonymous) @ cookieCrumbler.js:1
+(anonymous) @ cookieCrumbler.js:1
+adsContent.js:187  Uncaught ReferenceError: browser is not defined
+    at 7 (adsContent.js:187:78660)
+    at __webpack_require__ (adsContent.js:2:128)
+    at 5 (adsContent.js:187:57680)
+    at __webpack_require__ (adsContent.js:2:128)
+    at 38 (adsContent.js:187:45960)
+    at __webpack_require__ (adsContent.js:2:128)
+    at 31 (adsContent.js:187:38940)
+    at __webpack_require__ (adsContent.js:2:128)
+    at 6 (adsContent.js:187:64539)
+    at __webpack_require__ (adsContent.js:2:128)
+7 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+5 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+38 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+31 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+6 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+20 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+15 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+387 @ adsContent.js:187
+__webpack_require__ @ adsContent.js:2
+(anonymous) @ adsContent.js:2
+(anonymous) @ adsContent.js:2
+hooksManager.js:242  Uncaught ReferenceError: browser is not defined
+    at 7 (hooksManager.js:242:28616)
+    at __webpack_require__ (hooksManager.js:2:128)
+    at 5 (hooksManager.js:242:7313)
+    at __webpack_require__ (hooksManager.js:2:128)
+    at 38 (hooksManager.js:9:24734)
+    at __webpack_require__ (hooksManager.js:2:128)
+    at 31 (hooksManager.js:9:22383)
+    at __webpack_require__ (hooksManager.js:2:128)
+    at 6 (hooksManager.js:242:14772)
+    at __webpack_require__ (hooksManager.js:2:128)
+7 @ hooksManager.js:242
+__webpack_require__ @ hooksManager.js:2
+5 @ hooksManager.js:242
+__webpack_require__ @ hooksManager.js:2
+38 @ hooksManager.js:9
+__webpack_require__ @ hooksManager.js:2
+31 @ hooksManager.js:9
+__webpack_require__ @ hooksManager.js:2
+6 @ hooksManager.js:242
+__webpack_require__ @ hooksManager.js:2
+394 @ hooksManager.js:9
+__webpack_require__ @ hooksManager.js:2
+(anonymous) @ hooksManager.js:2
+(anonymous) @ hooksManager.js:2
+content.06af5f40.js:1 content.ts run!
+content.06af5f40.js:1 initPage()
+vendor.js:13233  Uncaught Error: [$injector:modulerr] Failed to instantiate module plik due to:
+Error: [$injector:modulerr] Failed to instantiate module api due to:
+Error: [$injector:nomod] Module 'api' is not available! You either misspelled the module name or forgot to load it. If registering a module ensure that you specify the dependencies as the second argument.
+
+
+https://errors.angularjs.org/1.8.3/$injector/modulerr?p0=plik&p1=Error%3A%20%5B%24injector%3Amodulerr%5D%20Failed%20to%20instantiate%20module%20api%20due%20to%3A%0AError%3A%20%5B%24injector%3Anomod%5D%20Module%20'api'%20is%20not%20available!%20You%20either%20misspelled%20the%20module%20name%20or%20forgot%20to%20load%20it.%20If%20registering%20a%20module%20ensure%20that%20you%20specify%20the%20dependencies%20as%20the%20second%20argument.%0A%0Ahttps%3A%2F%2Ferrors.angularjs.org%2F1.8.3%2F%24injector%2Fmodulerr%3Fp0%3Dapi%26p1%3DError%253A%2520%255B%2524injector%253Anomod%255D%2520Module%2520'api'%2520is%2520not%2520available!%2520You%2520either%2520misspelled%2520the%2520module%2520name%2520or%2520forgot%2520to%2520load%2520it.%2520If%2520registering%2520a%2520module%2520ensure%2520that%2520you%2520specify%2520the%2520dependencies%2520as%2520the%2520second%2520argument.%250Ahttps%253A%252F%252Ferrors.angularjs.org%252F1.8.3%252F%2524injector%252Fnomod%253Fp0%253Dapi%250A%2520%2520%2520%2520at%2520https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A124867%250A%2520%2520%2520%2520at%2520https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A304000%250A%2520%2520%2520%2520at%2520t%2520(https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A303685)%250A%2520%2520%2520%2520at%2520https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A303971%250A%2520%2520%2520%2520at%2520https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A149223%250A%2520%2520%2520%2520at%2520ve%2520(https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A125588)%250A%2520%2520%2520%2520at%2520g%2520(https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A149167)%250A%2520%2520%2520%2520at%2520https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A149254%250A%2520%2520%2520%2520at%2520ve%2520(https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A125588)%250A%2520%2520%2520%2520at%2520g%2520(https%253A%252F%252Fstickynotes-imi8.onrender.com%252Fjs%252Fvendor.js%253A1%253A149167)%0A%20%20%20%20at%20https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A124867%0A%20%20%20%20at%20https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A149515%0A%20%20%20%20at%20ve%20(https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A125588)%0A%20%20%20%20at%20g%20(https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A149167)%0A%20%20%20%20at%20https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A149254%0A%20%20%20%20at%20ve%20(https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A125588)%0A%20%20%20%20at%20g%20(https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A149167)%0A%20%20%20%20at%20nn%20(https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A148503)%0A%20%20%20%20at%20t%20(https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A134423)%0A%20%20%20%20at%20ne%20(https%3A%2F%2Fstickynotes-imi8.onrender.com%2Fjs%2Fvendor.js%3A1%3A134742)
+    at vendor.js:13233:12
+    at vendor.js:18222:15
+    at ve (vendor.js:13483:20)
+    at g (vendor.js:18182:5)
+    at nn (vendor.js:18099:19)
+    at t (vendor.js:15058:20)
+    at ne (vendor.js:15079:12)
+    at te (vendor.js:14964:5)
+    at HTMLDocument.<anonymous> (vendor.js:49690:5)
+    at e (vendor.js:3489:29)
+(anonymous) @ vendor.js:13233
+(anonymous) @ vendor.js:18222
+ve @ vendor.js:13483
+g @ vendor.js:18182
+nn @ vendor.js:18099
+t @ vendor.js:15058
+ne @ vendor.js:15079
+te @ vendor.js:14964
+(anonymous) @ vendor.js:49690
+e @ vendor.js:3489
+t @ vendor.js:3557
+setTimeout
+(anonymous) @ vendor.js:3602
+c @ vendor.js:3223
+fireWith @ vendor.js:3353
+fire @ vendor.js:3361
+c @ vendor.js:3223
+fireWith @ vendor.js:3353
+ready @ vendor.js:3844
+j @ vendor.js:3854
+VM237:2 Scraping links on current page
+VM237:26 Found 0 feeds on page...

@@ -76,12 +76,16 @@
                         dataTransfer.items.add(files[i]);
                     }
                     
-                    // Set the file input's files
-                    fileInput.files = dataTransfer.files;
-                    
-                    // Trigger change event to notify Angular
-                    var event = new Event('change', { bubbles: true });
-                    fileInput.dispatchEvent(event);
+                    try {
+                        // Set the file input's files
+                        fileInput.files = dataTransfer.files;
+                        
+                        // Trigger change event to notify Angular
+                        var event = new Event('change', { bubbles: true });
+                        fileInput.dispatchEvent(event);
+                    } catch (err) {
+                        console.log('Error handling files:', err);
+                    }
                 }
             }
         }, false);
@@ -97,21 +101,16 @@
                 // Get the Angular scope from the upload menu
                 var uploadMenuElement = document.querySelector('[ng-if="mode == \'upload\'"]');
                 if (uploadMenuElement) {
-                    var scope = angular.element(uploadMenuElement).scope();
-                    
-                    // Add the toggle method to the scope
-                    if (scope) {
-                        // Initialize showSettings
-                        scope.showSettings = false;
+                    try {
+                        var scope = angular.element(uploadMenuElement).scope();
                         
-                        // Add toggle function
-                        scope.toggleSettings = function() {
-                            scope.showSettings = !scope.showSettings;
+                        // Add the toggle method to the scope
+                        if (scope) {
+                            // Apply the changes
                             scope.$apply();
-                        };
-                        
-                        // Apply the changes
-                        scope.$apply();
+                        }
+                    } catch (err) {
+                        console.log('Error initializing settings toggle:', err);
                     }
                 }
             }
@@ -193,13 +192,21 @@
         
         // Add close button functionality
         closeBtn.addEventListener('click', function() {
-            document.body.removeChild(overlay);
+            try {
+                document.body.removeChild(overlay);
+            } catch (err) {
+                console.log('Error removing welcome popup:', err);
+            }
         });
         
         // Assemble and add to DOM
-        popup.appendChild(message);
-        popup.appendChild(closeBtn);
-        overlay.appendChild(popup);
-        document.body.appendChild(overlay);
+        try {
+            popup.appendChild(message);
+            popup.appendChild(closeBtn);
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+        } catch (err) {
+            console.log('Error showing welcome popup:', err);
+        }
     }
 })(); 
