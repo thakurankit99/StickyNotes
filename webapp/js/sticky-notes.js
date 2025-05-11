@@ -11,18 +11,12 @@
         });
     }]);
     
-    // Extend the MainCtrl to add toggleNoteSettings function
+    // Add the showSettings toggle to the root scope
     angular.module('plik').run(['$rootScope', function($rootScope) {
-        // Add a function to toggle the note settings panel
-        $rootScope.toggleNoteSettings = function() {
-            var settingsPanel = document.getElementById('note-settings-panel');
-            if (settingsPanel) {
-                if (settingsPanel.style.display === 'none') {
-                    settingsPanel.style.display = 'block';
-                } else {
-                    settingsPanel.style.display = 'none';
-                }
-            }
+        $rootScope.showSettings = false;
+        
+        $rootScope.toggleSettings = function() {
+            $rootScope.showSettings = !$rootScope.showSettings;
         };
     }]);
     

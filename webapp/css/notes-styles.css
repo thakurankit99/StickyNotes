@@ -27,47 +27,6 @@ body.drag-over:before {
     display: block;
 }
 
-/* Note Settings Panel */
-.note-settings-panel {
-    background-color: #fff9e6;
-    border-radius: 5px;
-    border: 1px dashed #e0d8b0;
-    padding: 10px;
-    margin: 10px 0;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) inset;
-    font-family: 'Indie Flower', cursive !important;
-    transition: all 0.3s ease;
-}
-
-.note-settings-panel h4 {
-    color: #ff6b35;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding-bottom: 5px;
-    font-weight: bold;
-}
-
-.note-settings-panel .menu-item {
-    margin-bottom: 10px;
-}
-
-.note-settings-panel .switch-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.note-settings-panel .form-control {
-    border-color: rgba(0, 0, 0, 0.1);
-}
-
-.note-settings-panel textarea {
-    resize: vertical;
-    min-height: 80px;
-    font-family: 'Courier New', monospace;
-    background-color: #fffdf5;
-}
-
 /* Enhance sticky note appearance */
 .tile {
     background-color: #fefabc !important;
@@ -493,4 +452,50 @@ body.drag-over:before {
         width: 200px;
         height: 200px;
     }
+} 
+
+/* Settings panel styles */
+.settings-panel {
+    margin-top: -15px;
+    border-top: none !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    background-color: #fffdd8 !important;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.settings-panel:before {
+    display: none;
+}
+
+/* Improve switch controls */
+.switch-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.switch-input input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.switch-input i {
+    margin-right: 10px;
+}
+
+/* Add fade-in animation for the settings panel */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-panel.ng-show {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.settings-panel.ng-hide {
+    animation: fadeIn 0.3s ease-out reverse;
 } 
