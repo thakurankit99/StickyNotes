@@ -8,6 +8,13 @@ RUN apk add --no-cache git make bash
 COPY Makefile .
 COPY webapp /webapp
 
+# Ensure our custom JS and CSS files are copied before the build
+RUN mkdir -p /webapp/dist/js /webapp/dist/css && \
+    if [ -f /webapp/js/sticky-notes.js ]; then cp /webapp/js/sticky-notes.js /webapp/dist/js/; fi && \
+    if [ -f /webapp/js/board-controller.js ]; then cp /webapp/js/board-controller.js /webapp/dist/js/; fi && \
+    if [ -f /webapp/css/notes-styles.css ]; then cp /webapp/css/notes-styles.css /webapp/dist/css/; fi && \
+    if [ -f /webapp/css/board-view.css ]; then cp /webapp/css/board-view.css /webapp/dist/css/; fi
+
 RUN make clean-frontend frontend
 
 ##################################################################################
@@ -22,6 +29,9 @@ WORKDIR /go/src/github.com/root-gg/plik
 
 # Copy webapp build from previous stage
 COPY --from=plik-frontend-builder /webapp/dist webapp/dist
+
+# Ensure our custom JS and CSS files are preserved after frontend build
+RUN mkdir -p webapp/dist/js webapp/dist/css
 
 ARG CLIENT_TARGETS=""
 ENV CLIENT_TARGETS=$CLIENT_TARGETS
@@ -74,7 +84,19 @@ RUN adduser \
 
 COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/release /home/plik/
 
+# Create MIME type configuration file for the server
+RUN echo '{"application/javascript": ["js"], "text/css": ["css"]}' > /home/plik/mime.types.json && \
+    chown ${UID}:${UID} /home/plik/mime.types.json
+
+# Create a startup script to configure the server with correct MIME types
+RUN echo '#!/bin/sh' > /home/plik/start.sh && \
+    echo 'cd /home/plik/server' >> /home/plik/start.sh && \
+    echo 'export PLIK_MIME_CONFIG=/home/plik/mime.types.json' >> /home/plik/start.sh && \
+    echo './plikd "$@"' >> /home/plik/start.sh && \
+    chmod +x /home/plik/start.sh && \
+    chown ${UID}:${UID} /home/plik/start.sh
+
 EXPOSE 8080
 USER plik
-WORKDIR /home/plik/server
-CMD ["./plikd"]
+WORKDIR /home/plik
+CMD ["./start.sh"]

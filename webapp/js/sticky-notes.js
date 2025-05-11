@@ -15,6 +15,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();
         addWelcomeNote(); // Activate the welcome note
+        setupFloatingNotes(); // Initialize floating notes functionality
     });
 
     // Setup whole-page drag and drop
@@ -178,5 +179,438 @@
         popup.appendChild(closeBtn);
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
+    }
+
+    // Floating Sticky Notes Functionality
+    function setupFloatingNotes() {
+        // Create the add note button that floats on the page
+        createFloatingAddButton();
+        
+        // Load existing floating notes from localStorage
+        loadFloatingNotes();
+        
+        // Set up event delegation for the document to handle note interactions
+        setupNoteEventListeners();
+    }
+    
+    function createFloatingAddButton() {
+        var addButton = document.createElement('button');
+        addButton.className = 'floating-add-note-btn';
+        addButton.innerHTML = '<i class="fa fa-plus"></i>';
+        addButton.title = 'Add a quick note';
+        
+        addButton.addEventListener('click', function() {
+            createNewFloatingNote();
+        });
+        
+        document.body.appendChild(addButton);
+    }
+    
+    function createNewFloatingNote(content, position, color) {
+        // Generate a unique ID for the note
+        var noteId = 'note-' + Date.now();
+        
+        // Create default note data if not provided
+        content = content || 'Type your note here...';
+        position = position || {
+            x: 50 + Math.random() * 100,
+            y: 120 + Math.random() * 100
+        };
+        color = color || getRandomNoteColor();
+        
+        // Create note HTML structure
+        var noteElement = document.createElement('div');
+        noteElement.className = 'floating-note ' + color;
+        noteElement.id = noteId;
+        noteElement.style.left = position.x + 'px';
+        noteElement.style.top = position.y + 'px';
+        
+        noteElement.innerHTML = `
+            <div class="note-header">
+                <div class="note-drag-handle"></div>
+                <div class="note-actions">
+                    <button class="note-color-btn" title="Change color"><i class="fa fa-paint-brush"></i></button>
+                    <button class="note-minimize-btn" title="Minimize"><i class="fa fa-minus"></i></button>
+                    <button class="note-close-btn" title="Close"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="note-content" contenteditable="true">${content}</div>
+            <div class="note-footer">
+                <span class="note-timestamp">Just now</span>
+            </div>
+            <div class="note-resize-handle"></div>
+        `;
+        
+        // Add color picker options
+        var colorPicker = document.createElement('div');
+        colorPicker.className = 'note-color-picker';
+        
+        var colors = ['note-yellow', 'note-pink', 'note-blue', 'note-green', 'note-purple'];
+        colors.forEach(function(colorClass) {
+            var colorOption = document.createElement('div');
+            colorOption.className = 'color-option ' + colorClass;
+            colorOption.setAttribute('data-color', colorClass);
+            colorPicker.appendChild(colorOption);
+        });
+        
+        noteElement.appendChild(colorPicker);
+        
+        // Add the note to the DOM
+        document.body.appendChild(noteElement);
+        
+        // Make it draggable
+        makeNoteDraggable(noteElement);
+        
+        // Make it resizable
+        makeNoteResizable(noteElement);
+        
+        // Save this note to localStorage
+        saveFloatingNote(noteId, {
+            id: noteId,
+            content: content,
+            position: position,
+            color: color,
+            timestamp: new Date().toISOString(),
+            minimized: false
+        });
+        
+        return noteElement;
+    }
+    
+    function getRandomNoteColor() {
+        var colors = ['note-yellow', 'note-pink', 'note-blue', 'note-green', 'note-purple'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+    
+    function makeNoteDraggable(noteElement) {
+        var dragHandle = noteElement.querySelector('.note-drag-handle');
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        
+        dragHandle.addEventListener('mousedown', dragMouseDown);
+        
+        function dragMouseDown(e) {
+            e.preventDefault();
+            
+            // Bring this note to the front
+            bringNoteToFront(noteElement);
+            
+            // Get the mouse cursor position at startup
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            
+            document.addEventListener('mouseup', closeDragElement);
+            document.addEventListener('mousemove', elementDrag);
+        }
+        
+        function elementDrag(e) {
+            e.preventDefault();
+            
+            // Calculate the new cursor position
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            
+            // Set the element's new position
+            noteElement.style.top = (noteElement.offsetTop - pos2) + 'px';
+            noteElement.style.left = (noteElement.offsetLeft - pos1) + 'px';
+        }
+        
+        function closeDragElement() {
+            // Stop moving when mouse button is released
+            document.removeEventListener('mouseup', closeDragElement);
+            document.removeEventListener('mousemove', elementDrag);
+            
+            // Save the note's position
+            var noteId = noteElement.id;
+            var noteData = getFloatingNote(noteId);
+            if (noteData) {
+                noteData.position = {
+                    x: noteElement.offsetLeft,
+                    y: noteElement.offsetTop
+                };
+                saveFloatingNote(noteId, noteData);
+            }
+        }
+    }
+    
+    function makeNoteResizable(noteElement) {
+        var resizeHandle = noteElement.querySelector('.note-resize-handle');
+        var startX, startY, startWidth, startHeight;
+        
+        resizeHandle.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            bringNoteToFront(noteElement);
+            
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = noteElement.offsetWidth;
+            startHeight = noteElement.offsetHeight;
+            
+            document.addEventListener('mousemove', resizeNote);
+            document.addEventListener('mouseup', stopResize);
+        });
+        
+        function resizeNote(e) {
+            e.preventDefault();
+            
+            // Calculate new size with minimum dimensions
+            var newWidth = Math.max(200, startWidth + e.clientX - startX);
+            var newHeight = Math.max(150, startHeight + e.clientY - startY);
+            
+            // Apply new size
+            noteElement.style.width = newWidth + 'px';
+            noteElement.style.height = newHeight + 'px';
+        }
+        
+        function stopResize() {
+            document.removeEventListener('mousemove', resizeNote);
+            document.removeEventListener('mouseup', stopResize);
+            
+            // Save the note's dimensions
+            var noteId = noteElement.id;
+            var noteData = getFloatingNote(noteId);
+            if (noteData) {
+                noteData.size = {
+                    width: noteElement.offsetWidth,
+                    height: noteElement.offsetHeight
+                };
+                saveFloatingNote(noteId, noteData);
+            }
+        }
+    }
+    
+    function bringNoteToFront(noteElement) {
+        // Get all notes
+        var notes = document.querySelectorAll('.floating-note');
+        
+        // Find the highest z-index
+        var maxZ = 0;
+        notes.forEach(function(note) {
+            var zIndex = parseInt(window.getComputedStyle(note).zIndex, 10) || 0;
+            maxZ = Math.max(maxZ, zIndex);
+        });
+        
+        // Set this note's z-index higher than the highest
+        noteElement.style.zIndex = maxZ + 1;
+    }
+    
+    function setupNoteEventListeners() {
+        // Use event delegation for all note-related events
+        document.addEventListener('click', function(e) {
+            var target = e.target;
+            
+            // Close button
+            if (target.closest('.note-close-btn')) {
+                var note = target.closest('.floating-note');
+                if (note) {
+                    deleteFloatingNote(note.id);
+                    note.remove();
+                }
+            }
+            
+            // Minimize button
+            else if (target.closest('.note-minimize-btn')) {
+                var note = target.closest('.floating-note');
+                if (note) {
+                    toggleNoteMinimized(note);
+                }
+            }
+            
+            // Color button
+            else if (target.closest('.note-color-btn')) {
+                var note = target.closest('.floating-note');
+                if (note) {
+                    toggleColorPicker(note);
+                }
+            }
+            
+            // Color option
+            else if (target.closest('.color-option')) {
+                var colorOption = target.closest('.color-option');
+                var note = colorOption.closest('.floating-note');
+                if (note) {
+                    changeNoteColor(note, colorOption.getAttribute('data-color'));
+                    toggleColorPicker(note, false); // Hide the color picker
+                }
+            }
+            
+            // Anywhere on the note brings it to front
+            else if (target.closest('.floating-note')) {
+                var note = target.closest('.floating-note');
+                bringNoteToFront(note);
+            }
+        });
+        
+        // Track note content changes
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('.note-content')) {
+                var noteContent = e.target;
+                var note = noteContent.closest('.floating-note');
+                if (note) {
+                    var noteId = note.id;
+                    var noteData = getFloatingNote(noteId);
+                    if (noteData) {
+                        noteData.content = noteContent.innerHTML;
+                        noteData.timestamp = new Date().toISOString();
+                        saveFloatingNote(noteId, noteData);
+                        
+                        // Update timestamp display
+                        var timestampEl = note.querySelector('.note-timestamp');
+                        if (timestampEl) {
+                            timestampEl.textContent = 'Just now';
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function toggleNoteMinimized(noteElement) {
+        var noteId = noteElement.id;
+        var noteData = getFloatingNote(noteId);
+        
+        if (noteData) {
+            // Toggle minimized state
+            noteData.minimized = !noteData.minimized;
+            
+            // Update the UI
+            if (noteData.minimized) {
+                noteElement.classList.add('minimized');
+                var minimizeBtn = noteElement.querySelector('.note-minimize-btn i');
+                if (minimizeBtn) {
+                    minimizeBtn.className = 'fa fa-expand';
+                }
+            } else {
+                noteElement.classList.remove('minimized');
+                var minimizeBtn = noteElement.querySelector('.note-minimize-btn i');
+                if (minimizeBtn) {
+                    minimizeBtn.className = 'fa fa-minus';
+                }
+            }
+            
+            // Save the updated state
+            saveFloatingNote(noteId, noteData);
+        }
+    }
+    
+    function toggleColorPicker(noteElement, show) {
+        var colorPicker = noteElement.querySelector('.note-color-picker');
+        if (!colorPicker) return;
+        
+        // If show is explicitly provided, set that state, otherwise toggle
+        if (typeof show !== 'undefined') {
+            colorPicker.style.display = show ? 'flex' : 'none';
+        } else {
+            colorPicker.style.display = colorPicker.style.display === 'flex' ? 'none' : 'flex';
+        }
+    }
+    
+    function changeNoteColor(noteElement, colorClass) {
+        var noteId = noteElement.id;
+        var noteData = getFloatingNote(noteId);
+        
+        if (noteData) {
+            // Remove current color class
+            var colors = ['note-yellow', 'note-pink', 'note-blue', 'note-green', 'note-purple'];
+            colors.forEach(function(color) {
+                noteElement.classList.remove(color);
+            });
+            
+            // Add new color class
+            noteElement.classList.add(colorClass);
+            
+            // Update in storage
+            noteData.color = colorClass;
+            saveFloatingNote(noteId, noteData);
+        }
+    }
+    
+    // Local Storage handling functions
+    function saveFloatingNote(noteId, noteData) {
+        // Get existing notes
+        var notes = getAllFloatingNotes();
+        
+        // Update or add this note
+        notes[noteId] = noteData;
+        
+        // Save back to localStorage
+        localStorage.setItem('floatingNotes', JSON.stringify(notes));
+    }
+    
+    function getFloatingNote(noteId) {
+        var notes = getAllFloatingNotes();
+        return notes[noteId];
+    }
+    
+    function deleteFloatingNote(noteId) {
+        var notes = getAllFloatingNotes();
+        
+        if (notes[noteId]) {
+            delete notes[noteId];
+            localStorage.setItem('floatingNotes', JSON.stringify(notes));
+        }
+    }
+    
+    function getAllFloatingNotes() {
+        var notesJson = localStorage.getItem('floatingNotes');
+        return notesJson ? JSON.parse(notesJson) : {};
+    }
+    
+    function loadFloatingNotes() {
+        var notes = getAllFloatingNotes();
+        
+        // Create DOM elements for each note
+        Object.keys(notes).forEach(function(noteId) {
+            var noteData = notes[noteId];
+            var noteElement = createNewFloatingNote(
+                noteData.content,
+                noteData.position,
+                noteData.color
+            );
+            
+            // Apply saved size if available
+            if (noteData.size) {
+                noteElement.style.width = noteData.size.width + 'px';
+                noteElement.style.height = noteData.size.height + 'px';
+            }
+            
+            // Apply minimized state if needed
+            if (noteData.minimized) {
+                noteElement.classList.add('minimized');
+                var minimizeBtn = noteElement.querySelector('.note-minimize-btn i');
+                if (minimizeBtn) {
+                    minimizeBtn.className = 'fa fa-expand';
+                }
+            }
+            
+            // Update timestamp display
+            var timeAgo = getTimeAgo(new Date(noteData.timestamp));
+            var timestampEl = noteElement.querySelector('.note-timestamp');
+            if (timestampEl) {
+                timestampEl.textContent = timeAgo;
+            }
+        });
+    }
+    
+    function getTimeAgo(date) {
+        var now = new Date();
+        var diffMs = now - date;
+        var diffSec = Math.floor(diffMs / 1000);
+        var diffMin = Math.floor(diffSec / 60);
+        var diffHour = Math.floor(diffMin / 60);
+        var diffDay = Math.floor(diffHour / 24);
+        
+        if (diffSec < 60) {
+            return 'Just now';
+        } else if (diffMin < 60) {
+            return diffMin + ' minute' + (diffMin > 1 ? 's' : '') + ' ago';
+        } else if (diffHour < 24) {
+            return diffHour + ' hour' + (diffHour > 1 ? 's' : '') + ' ago';
+        } else {
+            return diffDay + ' day' + (diffDay > 1 ? 's' : '') + ' ago';
+        }
     }
 })(); 

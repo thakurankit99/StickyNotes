@@ -196,3 +196,260 @@ body.drag-over:before {
         font-size: 14px !important;
     }
 } 
+
+/* Floating Sticky Notes Styling */
+.floating-add-note-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ff6b35;
+    color: white;
+    border: none;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.floating-add-note-btn:hover {
+    transform: scale(1.1);
+    background-color: #e55a2b;
+}
+
+.floating-note {
+    position: fixed;
+    width: 250px;
+    height: 250px;
+    border-radius: 2px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Indie Flower', cursive;
+    z-index: 100;
+    transition: box-shadow 0.3s;
+}
+
+.floating-note:hover {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.floating-note:before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.floating-note:after {
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 5px;
+    bottom: -5px;
+    left: 5%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 5px 5px;
+}
+
+.note-header {
+    height: 30px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+}
+
+.note-drag-handle {
+    flex-grow: 1;
+    height: 100%;
+}
+
+.note-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.note-actions button {
+    background: transparent;
+    border: none;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+.note-actions button:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.note-content {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    outline: none;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.note-footer {
+    padding: 5px 10px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: right;
+}
+
+.note-resize-handle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    bottom: 5px;
+    right: 5px;
+    cursor: nwse-resize;
+    opacity: 0.5;
+}
+
+.note-color-picker {
+    position: absolute;
+    top: 35px;
+    right: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 3;
+}
+
+.note-color-picker .color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    transition: transform 0.2s;
+}
+
+.note-color-picker .color-option:hover {
+    transform: scale(1.2);
+}
+
+/* Note colors */
+.floating-note.note-yellow {
+    background-color: #fefabc;
+    transform: rotate(1deg);
+}
+
+.floating-note.note-yellow:before {
+    background-color: #ff6b35;
+}
+
+.floating-note.note-pink {
+    background-color: #ff9b9b;
+    transform: rotate(-1deg);
+}
+
+.floating-note.note-pink:before {
+    background-color: #e86464;
+}
+
+.floating-note.note-blue {
+    background-color: #a2d8ff;
+    transform: rotate(1.5deg);
+}
+
+.floating-note.note-blue:before {
+    background-color: #4ecdc4;
+}
+
+.floating-note.note-green {
+    background-color: #b5f587;
+    transform: rotate(-0.5deg);
+}
+
+.floating-note.note-green:before {
+    background-color: #7bc950;
+}
+
+.floating-note.note-purple {
+    background-color: #d8b5ff;
+    transform: rotate(0.8deg);
+}
+
+.floating-note.note-purple:before {
+    background-color: #9b59b6;
+}
+
+.note-color-picker .color-option.note-yellow {
+    background-color: #fefabc;
+}
+
+.note-color-picker .color-option.note-pink {
+    background-color: #ff9b9b;
+}
+
+.note-color-picker .color-option.note-blue {
+    background-color: #a2d8ff;
+}
+
+.note-color-picker .color-option.note-green {
+    background-color: #b5f587;
+}
+
+.note-color-picker .color-option.note-purple {
+    background-color: #d8b5ff;
+}
+
+/* Minimized state */
+.floating-note.minimized {
+    height: 40px !important;
+    width: 200px !important;
+    overflow: hidden;
+}
+
+.floating-note.minimized .note-content,
+.floating-note.minimized .note-footer,
+.floating-note.minimized .note-resize-handle {
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .floating-add-note-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .floating-note {
+        width: 200px;
+        height: 200px;
+    }
+} 
