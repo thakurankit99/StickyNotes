@@ -216,7 +216,6 @@ body.drag-over:before {
     align-items: center;
     justify-content: center;
     transition: transform 0.2s, background-color 0.2s;
-    display: none !important;
 }
 
 .floating-add-note-btn:hover {
@@ -236,7 +235,6 @@ body.drag-over:before {
     font-family: 'Indie Flower', cursive;
     z-index: 100;
     transition: box-shadow 0.3s;
-    display: none !important;
 }
 
 .floating-note:hover {
@@ -454,50 +452,4 @@ body.drag-over:before {
         width: 200px;
         height: 200px;
     }
-} 
-
-/* Settings panel styles */
-.settings-panel {
-    margin-top: -15px;
-    border-top: none !important;
-    border-top-left-radius: 0 !important;
-    border-top-right-radius: 0 !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
-    background-color: #fffdd8 !important;
-    transition: all 0.3s ease;
-    overflow: hidden;
-}
-
-.settings-panel:before {
-    display: none;
-}
-
-/* Improve switch controls */
-.switch-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: 15px;
-}
-
-.switch-input input[type="checkbox"] {
-    margin-right: 8px;
-}
-
-.switch-input i {
-    margin-right: 10px;
-}
-
-/* Add fade-in animation for the settings panel */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.settings-panel.ng-show {
-    animation: fadeIn 0.3s ease-out;
-}
-
-.settings-panel.ng-hide {
-    animation: fadeIn 0.3s ease-out reverse;
 } 

@@ -11,15 +11,6 @@
         });
     }]);
     
-    // Add the showSettings toggle to the root scope
-    angular.module('plik').run(['$rootScope', function($rootScope) {
-        $rootScope.showSettings = false;
-        
-        $rootScope.toggleSettings = function() {
-            $rootScope.showSettings = !$rootScope.showSettings;
-        };
-    }]);
-    
     // Wait for document to be ready
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();

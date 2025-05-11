@@ -172,62 +172,48 @@
 
 .board-sticky-note .note-actions {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    display: flex;
-    gap: 8px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    z-index: 5;
+    bottom: 5px;
+    right: 5px;
+    display: none;
+    z-index: 10;
 }
 
 .board-sticky-note:hover .note-actions {
     display: flex;
-    opacity: 1;
+    gap: 8px;
 }
 
 .board-sticky-note .note-actions button {
     border: none;
-    background-color: rgba(255, 255, 255, 0.8);
-    width: 32px;
-    height: 32px;
+    background: rgba(255, 255, 255, 0.7);
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0.9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
+    padding: 0;
 }
 
 .board-sticky-note .note-actions button:hover {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.9);
     transform: scale(1.1);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.15);
 }
 
-.board-sticky-note .note-actions button i.fa-trash {
-    color: #e74c3c;
-    font-size: 16px;
+.board-sticky-note .note-actions button.delete-note-btn {
+    background-color: rgba(255, 200, 200, 0.8);
+    position: relative;
+    z-index: 20; /* Higher z-index for delete button */
 }
 
-.board-sticky-note .note-actions button:hover i.fa-trash {
-    color: #c0392b;
-}
-
-/* Specific styles for trash button */
-.board-sticky-note .note-actions button.delete-btn:hover {
-    background-color: #e74c3c;
-}
-
-.board-sticky-note .note-actions button.delete-btn:hover i.fa-trash {
-    color: white;
-}
-
-.board-sticky-note .note-actions button i.fa-paint-brush {
-    color: #3498db;
+.board-sticky-note .note-actions button.delete-note-btn:hover {
+    background-color: rgba(255, 100, 100, 0.9);
+    transform: scale(1.15); /* Slightly larger scale on hover */
 }
 
 .resize-handle {

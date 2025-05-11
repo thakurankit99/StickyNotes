@@ -169,12 +169,21 @@
 
         // Delete a note from the board
         $scope.deleteNote = function(note) {
+            // Stop event propagation to prevent drag start
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            
             var index = $scope.notes.indexOf(note);
             if (index !== -1) {
-                $scope.notes.splice(index, 1);
-                
-                // Save to localStorage
-                saveBoardState();
+                // Add a simple confirmation
+                if (confirm('Are you sure you want to delete this note?')) {
+                    $scope.notes.splice(index, 1);
+                    
+                    // Save to localStorage
+                    saveBoardState();
+                }
             }
         };
 
@@ -390,11 +399,14 @@
             element.addEventListener('mousedown', dragMouseDown);
             
             function dragMouseDown(e) {
-                // Ignore if clicked on content div (for editing) or resize handle
-                if (e.target.classList.contains('note-content') || 
+                // Improved check for interactive elements
+                // Check if the click is on a button, icon, content area, or resize handle
+                if (e.target.tagName === 'BUTTON' || 
+                    e.target.tagName === 'I' || 
+                    e.target.classList.contains('note-content') || 
                     e.target.classList.contains('resize-handle') ||
-                    e.target.tagName === 'BUTTON' ||
-                    e.target.tagName === 'I') {
+                    e.target.closest('.note-actions')) {
+                    // Allow the event to propagate to the actual target
                     return;
                 }
                 
