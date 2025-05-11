@@ -195,49 +195,4 @@ body.drag-over:before {
     .tagline {
         font-size: 14px !important;
     }
-}
-
-/* Settings toggle styling */
-.settings-header {
-    position: relative !important;
-    padding-bottom: 10px !important;
-    border-bottom: 1px dashed rgba(0, 0, 0, 0.1) !important;
-}
-
-.settings-header h4 {
-    margin: 0 !important;
-    font-weight: bold !important;
-}
-
-.settings-toggle {
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 50% !important;
-    background-color: #4ecdc4 !important;
-    color: white !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-}
-
-.settings-toggle:hover {
-    transform: rotate(45deg) !important;
-    background-color: #ff6b35 !important;
-}
-
-.settings-toggle .fa {
-    font-size: 16px !important;
-}
-
-/* Animate settings content */
-.settings-content {
-    overflow: hidden !important;
-    transition: max-height 0.3s ease !important;
-    border-bottom: 1px dashed rgba(0, 0, 0, 0.1) !important;
-    margin-bottom: 10px !important;
 } 

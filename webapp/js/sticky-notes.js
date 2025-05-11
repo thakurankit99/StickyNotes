@@ -7,7 +7,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         setupPageDragAndDrop();
         addWelcomeNote(); // Activate the welcome note
-        initSettingsToggle(); // Initialize settings toggle
     });
 
     // Setup whole-page drag and drop
@@ -76,45 +75,15 @@
                         dataTransfer.items.add(files[i]);
                     }
                     
-                    try {
-                        // Set the file input's files
-                        fileInput.files = dataTransfer.files;
-                        
-                        // Trigger change event to notify Angular
-                        var event = new Event('change', { bubbles: true });
-                        fileInput.dispatchEvent(event);
-                    } catch (err) {
-                        console.log('Error handling files:', err);
-                    }
+                    // Set the file input's files
+                    fileInput.files = dataTransfer.files;
+                    
+                    // Trigger change event to notify Angular
+                    var event = new Event('change', { bubbles: true });
+                    fileInput.dispatchEvent(event);
                 }
             }
         }, false);
-    }
-
-    // Initialize settings toggle functionality
-    function initSettingsToggle() {
-        // Wait for Angular to be ready
-        var checkInterval = setInterval(function() {
-            if (window.angular) {
-                clearInterval(checkInterval);
-                
-                // Get the Angular scope from the upload menu
-                var uploadMenuElement = document.querySelector('[ng-if="mode == \'upload\'"]');
-                if (uploadMenuElement) {
-                    try {
-                        var scope = angular.element(uploadMenuElement).scope();
-                        
-                        // Add the toggle method to the scope
-                        if (scope) {
-                            // Apply the changes
-                            scope.$apply();
-                        }
-                    } catch (err) {
-                        console.log('Error initializing settings toggle:', err);
-                    }
-                }
-            }
-        }, 100);
     }
 
     // Add a welcome message for first-time users
@@ -192,21 +161,13 @@
         
         // Add close button functionality
         closeBtn.addEventListener('click', function() {
-            try {
-                document.body.removeChild(overlay);
-            } catch (err) {
-                console.log('Error removing welcome popup:', err);
-            }
+            document.body.removeChild(overlay);
         });
         
         // Assemble and add to DOM
-        try {
-            popup.appendChild(message);
-            popup.appendChild(closeBtn);
-            overlay.appendChild(popup);
-            document.body.appendChild(overlay);
-        } catch (err) {
-            console.log('Error showing welcome popup:', err);
-        }
+        popup.appendChild(message);
+        popup.appendChild(closeBtn);
+        overlay.appendChild(popup);
+        document.body.appendChild(overlay);
     }
 })(); 
