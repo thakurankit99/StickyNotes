@@ -59,10 +59,10 @@ module.exports = function (grunt) {
             },
             favicon: {
                 files: [{
-                    src: [
-                        'favicon.ico',
-                    ],
-                    dest: 'dist/favicon.ico',
+                    expand: true,
+                    cwd: 'favicon/',
+                    src: ['**'],
+                    dest: 'dist/favicon/'
                 }]
             },
             partials: {
