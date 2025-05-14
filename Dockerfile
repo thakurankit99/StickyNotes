@@ -75,6 +75,21 @@ RUN chmod +x releaser/releaser.sh && \
     git tag -a "v1.0.0" -m "Docker build tag" && \
     releaser/releaser.sh
 
+# Install necessary tools for health check
+RUN apt-get update && apt-get install -y curl cron && rm -rf /var/lib/apt/lists/*
+
+# Copy health check script
+COPY health-check.sh /usr/local/bin/health-check.sh
+RUN chmod +x /usr/local/bin/health-check.sh
+
+# Setup cron job for health check (every 4 minutes and 50 seconds)
+RUN echo "*/4 * * * * sleep 50; /usr/local/bin/health-check.sh" > /etc/cron.d/health-check
+RUN chmod 0644 /etc/cron.d/health-check
+RUN crontab /etc/cron.d/health-check
+
+# Start cron in the background and then run the main process
+CMD service cron start && exec /bin/bash -c "YOUR_EXISTING_CMD"
+
 ##################################################################################
 FROM scratch AS plik-release-archive
 
@@ -84,7 +99,7 @@ COPY --from=plik-builder --chown=1000:1000 /go/src/github.com/root-gg/plik/plik-
 FROM alpine:3.18 AS plik-image
 
 # Add only necessary packages
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates curl dcron
 
 # Create plik user
 ENV USER=plik
@@ -111,7 +126,21 @@ COPY build-for-render.sh /home/plik/build-for-render.sh
 RUN chmod +x /home/plik/build-for-render.sh && \
     chown ${UID}:${UID} /home/plik/build-for-render.sh
 
+# Create health check script
+RUN mkdir -p /home/plik/scripts
+COPY health-check.sh /home/plik/scripts/health-check.sh
+RUN chmod +x /home/plik/scripts/health-check.sh && \
+    chown ${UID}:${UID} /home/plik/scripts/health-check.sh
+
+# Create a startup script to run both cron and the server
+RUN echo '#!/bin/sh' > /home/plik/start.sh && \
+    echo 'echo "*/4 * * * * sleep 50; /home/plik/scripts/health-check.sh" > /tmp/crontab' >> /home/plik/start.sh && \
+    echo 'crond -b -c /tmp' >> /home/plik/start.sh && \
+    echo 'cd /home/plik/server && ./plikd' >> /home/plik/start.sh && \
+    chmod +x /home/plik/start.sh && \
+    chown ${UID}:${UID} /home/plik/start.sh
+
 EXPOSE 8080
 USER plik
-WORKDIR /home/plik/server
-CMD ["./plikd"]
+WORKDIR /home/plik
+CMD ["./start.sh"]

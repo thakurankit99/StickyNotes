@@ -1,0 +1,5 @@
+# Run health check every 4 minutes and 50 seconds
+# The first line runs at 0, 4, 8, ... minutes
+# The second line runs at 4:50, 9:50, 14:50, ... minutes
+*/5 * * * * /path/to/external-health-check.sh
+4-59/5 * * * * sleep 50; /path/to/external-health-check.sh 
